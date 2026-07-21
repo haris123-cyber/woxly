@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Plus, Check, ShoppingCart } from "lucide-react";
 import { useCartStore } from "@/store/cartStore";
@@ -13,6 +14,7 @@ interface FrequentlyBoughtTogetherProps {
 
 export default function FrequentlyBoughtTogether({ currentProduct }: FrequentlyBoughtTogetherProps) {
   const { addToCart } = useCartStore();
+  const router = useRouter();
 
   // Find 2 recommended items from other categories
   const recommendedItems = MOCK_PRODUCTS.filter(
@@ -52,6 +54,7 @@ export default function FrequentlyBoughtTogether({ currentProduct }: FrequentlyB
       const color = product.colors?.[0]?.name;
       addToCart(product, 1, size, color);
     });
+    router.push("/cart");
   };
 
   if (recommendedItems.length === 0) return null;

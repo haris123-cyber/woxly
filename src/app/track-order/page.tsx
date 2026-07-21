@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { Search, MapPin, Truck, Calendar, Check, Clock } from "lucide-react";
+import { Search, MapPin, Truck, Calendar, Check, Clock, UserSearch } from "lucide-react";
 import { useCartStore, Order } from "@/store/cartStore";
 import { formatPrice } from "@/lib/utils";
 
@@ -238,9 +238,9 @@ function TrackOrderContent() {
         </div>
       ) : (
         searchAttempted && (
-          <div className="text-center py-8 border border-dashed border-border rounded-md p-6 bg-background text-xs">
-            <span className="text-2xl">🕵️</span>
-            <h3 className="font-bold mt-2 text-foreground">No Order Found</h3>
+          <div className="text-center py-8 border border-dashed border-border rounded-md p-6 bg-background text-xs flex flex-col items-center gap-2">
+            <UserSearch className="h-8 w-8 text-slate-400" />
+            <h3 className="font-bold text-foreground">No Order Found</h3>
             <p className="text-muted-foreground mt-0.5 max-w-[280px] mx-auto">
               We couldn't locate any order matching that Order ID and email. Please check your credentials and try again.
             </p>

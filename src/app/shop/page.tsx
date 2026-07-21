@@ -2,7 +2,7 @@
 
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { SlidersHorizontal, ChevronDown, RefreshCw, X, Star } from "lucide-react";
+import { SlidersHorizontal, ChevronDown, RefreshCw, X, Star, Search } from "lucide-react";
 import { MOCK_PRODUCTS, MOCK_CATEGORIES, Product } from "@/data/products";
 import ProductCard from "@/components/product/ProductCard";
 import { formatPrice } from "@/lib/utils";
@@ -29,6 +29,18 @@ function ShopContent() {
   useEffect(() => {
     setSelectedCategory(initialCategory);
   }, [initialCategory]);
+ 
+  // Lock body scroll when mobile filters are open
+  useEffect(() => {
+    if (mobileFiltersOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileFiltersOpen]);
 
   const brandsList = Array.from(new Set(MOCK_PRODUCTS.map(p => p.vendor).filter(Boolean))) as string[];
 
@@ -256,9 +268,9 @@ function ShopContent() {
         {/* Product Grid */}
         <div className="md:col-span-3">
           {sortedProducts.length === 0 ? (
-            <div className="text-center py-20 flex flex-col items-center justify-center border border-dashed border-border rounded-3xl p-6 bg-card">
-              <span className="text-3xl">🔍</span>
-              <h3 className="text-sm font-bold mt-4">No Products Found</h3>
+            <div className="text-center py-20 flex flex-col items-center justify-center border border-dashed border-border rounded-3xl p-6 bg-card gap-2">
+              <Search className="h-8 w-8 text-slate-400" />
+              <h3 className="text-sm font-bold mt-2">No Products Found</h3>
               <p className="text-xs text-muted-foreground mt-1 max-w-[280px]">
                 We couldn't find any products matching your filters. Try resetting your filters.
               </p>

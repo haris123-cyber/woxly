@@ -14,9 +14,16 @@ import {
   Zap,
   Home,
   Compass,
-  Tag,
   FileText,
-  Phone
+  Settings,
+  Shield,
+  Truck,
+  RotateCcw,
+  Info,
+  HelpCircle,
+  MessageSquare,
+  Mail,
+  Package
 } from "lucide-react";
 import { useCartStore } from "@/store/cartStore";
 import { MOCK_PRODUCTS, Product } from "@/data/products";
@@ -24,7 +31,7 @@ import { formatPrice } from "@/lib/utils";
 
 export default function Header() {
   const router = useRouter();
-  const { cart, theme, toggleTheme, setCartOpen, wishlist } = useCartStore();
+  const { cart, theme, toggleTheme, wishlist } = useCartStore();
   const [mounted, setMounted] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -58,6 +65,18 @@ export default function Header() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+ 
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileMenuOpen]);
 
   // Update suggestions on search query change
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -102,6 +121,7 @@ export default function Header() {
               onClick={() => setMobileMenuOpen(true)}
               className="p-2 -ml-2 text-primary-foreground rounded-lg hover:bg-primary-foreground/10 focus:outline-none"
               aria-label="Open Menu"
+              suppressHydrationWarning
             >
               <Menu className="h-6 w-6" />
             </button>
@@ -182,9 +202,9 @@ export default function Header() {
                 </Link>
               </div>
 
-              <button
+              <Link
                 suppressHydrationWarning
-                onClick={() => setCartOpen(true)}
+                href="/cart"
                 className="relative hidden sm:flex items-center justify-center h-10 w-10 bg-white rounded-full hover:bg-gray-100 transition-colors shadow-sm cursor-pointer"
                 aria-label="Open Cart"
               >
@@ -194,10 +214,10 @@ export default function Header() {
                     {cartItemCount}
                   </span>
                 )}
-              </button>
+              </Link>
 
               {/* Avatar */}
-              <Link href="/account" className="h-10 w-10 bg-accent rounded-full border-2 border-white/20 overflow-hidden hidden sm:flex items-center justify-center hover:opacity-90 transition-opacity">
+              <Link href="/account" className="h-10 w-10 bg-accent rounded-full border-2 border-white/20 overflow-hidden flex items-center justify-center hover:opacity-90 transition-opacity">
                 <User className="h-5 w-5 text-accent-foreground" />
               </Link>
             </div>
@@ -217,7 +237,7 @@ export default function Header() {
 
           {/* Drawer Content */}
           <div
-            className={`absolute top-0 left-0 bottom-0 w-[300px] bg-background shadow-2xl transition-transform duration-300 transform flex flex-col ${mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+            className={`absolute top-0 left-0 bottom-0 w-[300px] bg-background shadow-2xl transition-transform duration-300 transform flex flex-col h-full ${mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
               }`}
           >
             {/* Drawer Header */}
@@ -230,80 +250,158 @@ export default function Header() {
                 onClick={() => setMobileMenuOpen(false)}
                 className="p-2 text-muted-foreground hover:text-foreground rounded-full hover:bg-muted transition-colors"
                 aria-label="Close Menu"
+                suppressHydrationWarning
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
 
             {/* Navigation Links */}
-            <div className="flex-1 overflow-y-auto py-6 flex flex-col gap-1 px-3">
-              <p className="px-3 text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2">Navigation</p>
-              <Link
-                href="/"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-muted font-semibold text-sm text-foreground transition-colors"
-              >
-                <Home className="h-5 w-5 text-muted-foreground" />
-                Home
-              </Link>
-              <Link
-                href="/shop"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-muted font-semibold text-sm text-foreground transition-colors"
-              >
-                <Compass className="h-5 w-5 text-muted-foreground" />
-                Shop All
-              </Link>
-              <Link
-                href="/about"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-muted font-semibold text-sm text-foreground transition-colors"
-              >
-                <FileText className="h-5 w-5 text-muted-foreground" />
-                About Us
-              </Link>
-              <Link
-                href="/blog"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-muted font-semibold text-sm text-foreground transition-colors"
-              >
-                <FileText className="h-5 w-5 text-muted-foreground" />
-                Blog
-              </Link>
-              <Link
-                href="/contact"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-muted font-semibold text-sm text-foreground transition-colors"
-              >
-                <Phone className="h-5 w-5 text-muted-foreground" />
-                Contact
-              </Link>
+            <div className="flex-1 overflow-y-auto py-6 flex flex-col gap-6 px-4 text-left">
+              {/* Shop & Explore */}
+              <div>
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-3 mb-4">Shop & Explore</p>
+                <div className="flex flex-col gap-4">
+                  <Link
+                    href="/"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-4 px-3 py-2 rounded-xl hover:bg-muted font-bold text-xs text-slate-800 tracking-wider transition-colors group"
+                  >
+                    <Home className="h-5 w-5 text-[#1e293b] group-hover:text-primary transition-colors" />
+                    <span>HOME</span>
+                  </Link>
+                  <Link
+                    href="/shop"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-4 px-3 py-2 rounded-xl hover:bg-muted font-bold text-xs text-slate-800 tracking-wider transition-colors group"
+                  >
+                    <Compass className="h-5 w-5 text-[#1e293b] group-hover:text-primary transition-colors" />
+                    <span>SHOP</span>
+                  </Link>
+                  <Link
+                    href="/blog"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-4 px-3 py-2 rounded-xl hover:bg-muted font-bold text-xs text-slate-800 tracking-wider transition-colors group"
+                  >
+                    <FileText className="h-5 w-5 text-[#1e293b] group-hover:text-primary transition-colors" />
+                    <span>BLOG</span>
+                  </Link>
+                </div>
+              </div>
 
-              <div className="h-px bg-border/50 my-4 mx-3" />
-              <p className="px-3 text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2">Categories</p>
+              <div className="h-px bg-slate-200/60 mx-3" />
 
-              {["Vegetable", "Snacks & Breads", "Fruits", "Chicken legs", "Milk & Dairy"].map((cat) => (
-                <Link
-                  key={cat}
-                  href={`/shop?category=${encodeURIComponent(cat)}`}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-muted font-medium text-sm text-foreground transition-colors"
-                >
-                  <Tag className="h-4 w-4 text-muted-foreground" />
-                  {cat}
-                </Link>
-              ))}
+              {/* Your Account */}
+              <div>
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-3 mb-4">Your Account</p>
+                <div className="flex flex-col gap-4">
+                  <Link
+                    href="/account?tab=wishlist"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-4 px-3 py-2 rounded-xl hover:bg-muted font-bold text-xs text-slate-800 tracking-wider transition-colors group"
+                  >
+                    <Heart className="h-5 w-5 text-[#1e293b] group-hover:text-primary transition-colors" />
+                    <span>WISHLIST</span>
+                  </Link>
+                  <Link
+                    href="/account?tab=orders"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-4 px-3 py-2 rounded-xl hover:bg-muted font-bold text-xs text-slate-800 tracking-wider transition-colors group"
+                  >
+                    <Package className="h-5 w-5 text-[#1e293b] group-hover:text-primary transition-colors" />
+                    <span>ORDERS</span>
+                  </Link>
+                  <Link
+                    href="/login"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-4 px-3 py-2 rounded-xl hover:bg-muted font-bold text-xs text-slate-800 tracking-wider transition-colors group"
+                  >
+                    <User className="h-5 w-5 text-[#1e293b] group-hover:text-primary transition-colors" />
+                    <span>SIGN IN</span>
+                  </Link>
+                  <Link
+                    href="/account"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-4 px-3 py-2 rounded-xl hover:bg-muted font-bold text-xs text-slate-800 tracking-wider transition-colors group"
+                  >
+                    <Settings className="h-5 w-5 text-[#1e293b] group-hover:text-primary transition-colors" />
+                    <span>SETTINGS</span>
+                  </Link>
+                </div>
+              </div>
 
-              <div className="h-px bg-border/50 my-4 mx-3" />
+              <div className="h-px bg-slate-200/60 mx-3" />
 
-              <Link
-                href="/account"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-muted font-semibold text-sm text-foreground transition-colors mt-2"
-              >
-                <User className="h-5 w-5 text-muted-foreground" />
-                Account
-              </Link>
+              {/* Help & Policies */}
+              <div>
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-3 mb-4">Help & Policies</p>
+                <div className="flex flex-col gap-4">
+                  <Link
+                    href="/privacy"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-4 px-3 py-2 rounded-xl hover:bg-muted font-bold text-xs text-slate-800 tracking-wider transition-colors group"
+                  >
+                    <Shield className="h-5 w-5 text-[#1e293b] group-hover:text-primary transition-colors" />
+                    <span>PRIVACY POLICY</span>
+                  </Link>
+                  <Link
+                    href="/terms"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-4 px-3 py-2 rounded-xl hover:bg-muted font-bold text-xs text-slate-800 tracking-wider transition-colors group"
+                  >
+                    <FileText className="h-5 w-5 text-[#1e293b] group-hover:text-primary transition-colors" />
+                    <span>TERMS OF SERVICE</span>
+                  </Link>
+                  <Link
+                    href="/shipping"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-4 px-3 py-2 rounded-xl hover:bg-muted font-bold text-xs text-slate-800 tracking-wider transition-colors group"
+                  >
+                    <Truck className="h-5 w-5 text-[#1e293b] group-hover:text-primary transition-colors" />
+                    <span>SHIPPING POLICY</span>
+                  </Link>
+                  <Link
+                    href="/refund"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-4 px-3 py-2 rounded-xl hover:bg-muted font-bold text-xs text-slate-800 tracking-wider transition-colors group"
+                  >
+                    <RotateCcw className="h-5 w-5 text-[#1e293b] group-hover:text-primary transition-colors" />
+                    <span>RETURN POLICY</span>
+                  </Link>
+                  <Link
+                    href="/about"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-4 px-3 py-2 rounded-xl hover:bg-muted font-bold text-xs text-slate-800 tracking-wider transition-colors group"
+                  >
+                    <Info className="h-5 w-5 text-[#1e293b] group-hover:text-primary transition-colors" />
+                    <span>ABOUT US</span>
+                  </Link>
+                  <Link
+                    href="/faq"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-4 px-3 py-2 rounded-xl hover:bg-muted font-bold text-xs text-slate-800 tracking-wider transition-colors group"
+                  >
+                    <HelpCircle className="h-5 w-5 text-[#1e293b] group-hover:text-primary transition-colors" />
+                    <span>FAQS</span>
+                  </Link>
+                  <Link
+                    href="/contact"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-4 px-3 py-2 rounded-xl hover:bg-muted font-bold text-xs text-slate-800 tracking-wider transition-colors group"
+                  >
+                    <MessageSquare className="h-5 w-5 text-[#1e293b] group-hover:text-primary transition-colors" />
+                    <span>FEEDBACK</span>
+                  </Link>
+                  <Link
+                    href="/contact"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-4 px-3 py-2 rounded-xl hover:bg-muted font-bold text-xs text-slate-800 tracking-wider transition-colors group"
+                  >
+                    <Mail className="h-5 w-5 text-[#1e293b] group-hover:text-primary transition-colors" />
+                    <span>CONTACT</span>
+                  </Link>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -332,9 +430,9 @@ export default function Header() {
           <Search className="h-5 w-5" />
           <span className="text-[9px] mt-0.5 font-medium">Search</span>
         </Link>
-        <button
+        <Link
           suppressHydrationWarning
-          onClick={() => setCartOpen(true)}
+          href="/cart"
           className="flex flex-col items-center justify-center text-muted-foreground hover:text-foreground active:text-accent w-14 h-12 relative cursor-pointer"
         >
           <ShoppingBag className="h-5 w-5" />
@@ -344,7 +442,7 @@ export default function Header() {
             </span>
           )}
           <span className="text-[9px] mt-0.5 font-medium">Cart</span>
-        </button>
+        </Link>
       </nav>
     </>
   );

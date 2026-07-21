@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, Clock, User, MessageSquare } from "lucide-react";
+import { ArrowLeft, Clock, User, MessageSquare, XCircle } from "lucide-react";
 import { MOCK_BLOGS } from "@/data/blogs";
 
 interface PageProps {
@@ -16,9 +16,9 @@ export default function BlogDetailPage({ params }: PageProps) {
 
   if (!post) {
     return (
-      <div className="text-center py-20 flex flex-col items-center justify-center text-xs font-semibold">
-        <span className="text-3xl">❌</span>
-        <h1 className="text-lg font-black uppercase text-foreground mt-4">Article Not Found</h1>
+      <div className="text-center py-20 flex flex-col items-center justify-center text-xs font-semibold gap-2">
+        <XCircle className="h-8 w-8 text-red-500" />
+        <h1 className="text-lg font-black uppercase text-foreground mt-2">Article Not Found</h1>
         <p className="text-xs text-muted-foreground mt-1">The blog article you are looking for does not exist.</p>
         <Link
           href="/blog"

@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { CreditCard, ShieldCheck, ShoppingBag, Truck, Lock } from "lucide-react";
+import { CreditCard, ShieldCheck, ShoppingBag, Truck, Lock, Package } from "lucide-react";
 import { useCartStore } from "@/store/cartStore";
 import { formatPrice } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -301,7 +301,7 @@ export default function CheckoutPage() {
                 />
                 <div className="flex-1">
                   <div className="flex items-center gap-1.5">
-                    <span className="text-base">📦</span>
+                    <Package className="h-4 w-4 text-foreground" />
                     <span className="font-bold text-foreground">Partial Cash on Delivery (COD)</span>
                     <span className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded ml-auto">
                       Prepay 10%

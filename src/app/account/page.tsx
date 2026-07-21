@@ -16,7 +16,8 @@ import {
   ChevronRight,
   ShieldCheck,
   CheckCircle2,
-  Trash2
+  Trash2,
+  Box
 } from "lucide-react";
 import { useCartStore, Order } from "@/store/cartStore";
 import { formatPrice } from "@/lib/utils";
@@ -73,8 +74,52 @@ function AccountContent() {
       <h1 className="text-2xl font-black uppercase tracking-wider text-foreground">My Account</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-        {/* Navigation Sidebar */}
-        <aside className="bg-background text-foreground border border-border p-4 rounded-md h-fit space-y-1">
+        {/* Mobile Horizontal Navigation Tabs */}
+        <div className="md:hidden flex overflow-x-auto gap-2 pb-3 border-b border-border/60 hide-scrollbar snap-x -mx-4 px-4">
+          {[
+            { id: "dashboard", label: "Dashboard", icon: User },
+            { id: "orders", label: "My Orders", icon: ShoppingBag, badge: orders.length },
+            { id: "wishlist", label: "Wishlist", icon: Heart, badge: wishlist.length },
+            { id: "profile", label: "Profile", icon: User },
+            { id: "addresses", label: "Addresses", icon: MapPin },
+          ].map((tab) => {
+            const Icon = tab.icon;
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => changeTab(tab.id)}
+                className={`flex-shrink-0 snap-start flex items-center gap-1.5 px-4 py-2.5 rounded-full text-[10px] font-bold tracking-wider uppercase transition-all border cursor-pointer ${
+                  isActive
+                    ? "bg-primary text-primary-foreground border-primary shadow-sm"
+                    : "bg-white text-slate-700 hover:text-foreground border-slate-200"
+                }`}
+              >
+                <Icon className="h-3.5 w-3.5" />
+                <span>{tab.label}</span>
+                {tab.badge !== undefined && tab.badge > 0 && (
+                  <span
+                    className={`text-[9px] font-black h-4 w-4 rounded-full flex items-center justify-center ${
+                      isActive ? "bg-white text-primary" : "bg-slate-100 text-slate-800"
+                    }`}
+                  >
+                    {tab.badge}
+                  </span>
+                )}
+              </button>
+            );
+          })}
+          <button
+            onClick={handleLogout}
+            className="flex-shrink-0 snap-start flex items-center gap-1.5 px-4 py-2.5 rounded-full text-[10px] font-bold tracking-wider uppercase transition-all border border-red-200 text-red-600 bg-red-50 hover:bg-red-100 cursor-pointer"
+          >
+            <LogOut className="h-3.5 w-3.5" />
+            <span>Logout</span>
+          </button>
+        </div>
+
+        {/* Navigation Sidebar (Desktop only) */}
+        <aside className="hidden md:block bg-background text-foreground border border-border p-4 rounded-md h-fit space-y-1">
           {[
             { id: "dashboard", label: "Dashboard", icon: User },
             { id: "orders", label: "My Orders", icon: ShoppingBag, badge: orders.length },
@@ -157,9 +202,9 @@ function AccountContent() {
               </h2>
 
               {orders.length === 0 ? (
-                <div className="text-center py-12 border border-dashed border-border rounded-md bg-background">
-                  <span className="text-2xl">📦</span>
-                  <p className="text-xs font-semibold text-foreground mt-2">No Orders Placed Yet</p>
+                <div className="text-center py-12 border border-dashed border-border rounded-md bg-background flex flex-col items-center justify-center gap-2">
+                  <Box className="h-8 w-8 text-slate-400" />
+                  <p className="text-xs font-semibold text-foreground mt-1">No Orders Placed Yet</p>
                   <Link
                     href="/shop"
                     className="mt-4 bg-foreground text-background hover:bg-foreground/90 text-xs font-bold py-3 px-6 rounded-md inline-block"
@@ -244,9 +289,9 @@ function AccountContent() {
               </h2>
 
               {wishlist.length === 0 ? (
-                <div className="text-center py-12 border border-dashed border-border rounded-md bg-background">
-                  <span className="text-2xl">❤️</span>
-                  <p className="text-xs font-semibold text-foreground mt-2">Your Wishlist is Empty</p>
+                <div className="text-center py-12 border border-dashed border-border rounded-md bg-background flex flex-col items-center justify-center gap-2">
+                  <Heart className="h-8 w-8 text-slate-400" />
+                  <p className="text-xs font-semibold text-foreground mt-1">Your Wishlist is Empty</p>
                   <Link
                     href="/shop"
                     className="mt-4 bg-foreground text-background hover:bg-foreground/90 text-xs font-bold py-3 px-6 rounded-md inline-block"
@@ -273,7 +318,10 @@ function AccountContent() {
                         </h4>
                         <p className="text-foreground font-bold mt-0.5">{formatPrice(product.price)}</p>
                         <button
-                          onClick={() => addToCart(product, 1, product.sizes?.[0] || "One Size", product.colors?.[0]?.name)}
+                          onClick={() => {
+                            addToCart(product, 1, product.sizes?.[0] || "One Size", product.colors?.[0]?.name);
+                            router.push("/cart");
+                          }}
                           className="bg-foreground hover:bg-foreground/90 text-background text-[10px] font-bold px-3 py-1.5 rounded-md mt-2 cursor-pointer"
                         >
                           Add to Cart

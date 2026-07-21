@@ -3,7 +3,7 @@
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { CheckCircle2, ChevronRight, ShoppingBag, Truck } from "lucide-react";
+import { CheckCircle2, ChevronRight, ShoppingBag, Truck, MailOpen } from "lucide-react";
 import { useCartStore, Order } from "@/store/cartStore";
 import { formatPrice } from "@/lib/utils";
 
@@ -26,9 +26,9 @@ function SuccessContent() {
 
   if (!order) {
     return (
-      <div className="text-center py-20 flex flex-col items-center justify-center text-xs font-semibold">
-        <span className="text-3xl">📭</span>
-        <h1 className="text-lg font-black uppercase text-foreground mt-4">Order Details Loading</h1>
+      <div className="text-center py-20 flex flex-col items-center justify-center text-xs font-semibold gap-2">
+        <MailOpen className="h-8 w-8 text-slate-400" />
+        <h1 className="text-lg font-black uppercase text-foreground mt-2">Order Details Loading</h1>
         <p className="text-xs text-muted-foreground mt-1">We are retrieving your order details. Please stand by...</p>
         <Link
           href="/"

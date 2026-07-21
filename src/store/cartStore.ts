@@ -33,9 +33,8 @@ interface CartState {
   cart: CartItem[];
   wishlist: Product[];
   orders: Order[];
-  isCartOpen: boolean;
   theme: "light" | "dark";
-  
+
   // Actions
   addToCart: (product: Product, quantity: number, size?: string, color?: string) => void;
   removeFromCart: (productId: string, size?: string, color?: string) => void;
@@ -45,7 +44,6 @@ interface CartState {
   isInWishlist: (productId: string) => boolean;
   addOrder: (order: Omit<Order, "id" | "date" | "status">) => Order;
   toggleTheme: () => void;
-  setCartOpen: (isOpen: boolean) => void;
 }
 
 export const useCartStore = create<CartState>()(
@@ -99,7 +97,6 @@ export const useCartStore = create<CartState>()(
           ]
         }
       ],
-      isCartOpen: false,
       theme: "light",
 
       addToCart: (product, quantity, size, color) => {
@@ -114,12 +111,11 @@ export const useCartStore = create<CartState>()(
           if (existingItemIndex > -1) {
             const newCart = [...state.cart];
             newCart[existingItemIndex].quantity += quantity;
-            return { cart: newCart, isCartOpen: true };
+            return { cart: newCart };
           }
 
           return {
             cart: [...state.cart, { product, quantity, selectedSize: size, selectedColor: color }],
-            isCartOpen: true,
           };
         });
       },
@@ -145,8 +141,8 @@ export const useCartStore = create<CartState>()(
         set((state) => ({
           cart: state.cart.map((item) =>
             item.product.id === productId &&
-            item.selectedSize === size &&
-            item.selectedColor === color
+              item.selectedSize === size &&
+              item.selectedColor === color
               ? { ...item, quantity }
               : item
           ),
@@ -199,8 +195,6 @@ export const useCartStore = create<CartState>()(
           return { theme: nextTheme };
         });
       },
-
-      setCartOpen: (isOpen) => set({ isCartOpen: isOpen }),
     }),
     {
       name: "woxly-cart-storage",

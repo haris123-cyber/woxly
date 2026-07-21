@@ -3,6 +3,7 @@
 import { memo, useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Heart, Star, ShoppingBag, Eye } from "lucide-react";
 import { useCartStore } from "@/store/cartStore";
 import { Product } from "@/data/products";
@@ -17,6 +18,7 @@ function ProductCard({ product }: ProductCardProps) {
   const addToCart    = useCartStore((s) => s.addToCart);
   const toggleWishlist = useCartStore((s) => s.toggleWishlist);
   const wishlist     = useCartStore((s) => s.wishlist);
+  const router       = useRouter();
 
   const [isHovered, setIsHovered] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -35,6 +37,7 @@ function ProductCard({ product }: ProductCardProps) {
     const size  = product.sizes?.[0] || "One Size";
     const color = product.colors?.[0]?.name;
     addToCart(product, 1, size, color);
+    router.push("/cart");
   };
 
   const handleWishlist = (e: React.MouseEvent) => {

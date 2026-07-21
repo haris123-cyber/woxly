@@ -2,7 +2,7 @@
 
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { Search } from "lucide-react";
+import { Search, MailOpen } from "lucide-react";
 import { MOCK_PRODUCTS, Product } from "@/data/products";
 import ProductCard from "@/components/product/ProductCard";
 
@@ -78,9 +78,9 @@ function SearchContent() {
           ))}
         </div>
       ) : query ? (
-        <div className="text-center py-12 border border-dashed border-border rounded-3xl p-6 bg-card">
-          <span className="text-3xl">📭</span>
-          <h3 className="text-sm font-bold mt-4">No Results Found</h3>
+        <div className="text-center py-12 border border-dashed border-border rounded-3xl p-6 bg-card flex flex-col items-center gap-2">
+          <MailOpen className="h-8 w-8 text-slate-400" />
+          <h3 className="text-sm font-bold">No Results Found</h3>
           <p className="text-xs text-muted-foreground mt-1 max-w-[280px] mx-auto">
             We couldn't find any products matching your query. Double check the spelling or explore other items.
           </p>

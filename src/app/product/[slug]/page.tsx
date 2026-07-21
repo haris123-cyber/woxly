@@ -2,7 +2,8 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { ArrowLeft, Star, Heart, ShieldCheck, ChevronRight } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { ArrowLeft, Star, Heart, ShieldCheck, ChevronRight, XCircle, Flame, Truck, RefreshCw } from "lucide-react";
 import { MOCK_PRODUCTS } from "@/data/products";
 import ProductGallery from "@/components/product/ProductGallery";
 import StickyAddToCart from "@/components/product/StickyAddToCart";
@@ -19,6 +20,7 @@ interface PageProps {
 export default function ProductPage({ params }: PageProps) {
   const { slug } = React.use(params);
   const { addToCart, toggleWishlist, wishlist } = useCartStore();
+  const router = useRouter();
 
   // Find product by slug
   const product = MOCK_PRODUCTS.find((p) => p.slug === slug);
@@ -40,9 +42,9 @@ export default function ProductPage({ params }: PageProps) {
 
   if (!product) {
     return (
-      <div className="text-center py-20 flex flex-col items-center justify-center">
-        <span className="text-4xl">❌</span>
-        <h1 className="text-lg font-black mt-4 uppercase">Product Not Found</h1>
+      <div className="text-center py-20 flex flex-col items-center justify-center gap-2">
+        <XCircle className="h-10 w-10 text-red-500" />
+        <h1 className="text-lg font-black uppercase">Product Not Found</h1>
         <p className="text-xs text-muted-foreground mt-1 max-w-[280px]">
           The product you are looking for does not exist or has been removed from our catalog.
         </p>
@@ -60,6 +62,7 @@ export default function ProductPage({ params }: PageProps) {
 
   const handleAddToCart = () => {
     addToCart(product, quantity, selectedSize, selectedColor);
+    router.push("/cart");
   };
 
   // Find related products (same category, excluding current)
@@ -173,8 +176,9 @@ export default function ProductPage({ params }: PageProps) {
               </span>
             </div>
             {/* Live views indicator */}
-            <p className="text-[10px] text-muted-foreground/80 font-medium">
-              🔥 <span className="text-foreground font-bold">15 people</span> are viewing this product right now
+            <p className="text-[10px] text-muted-foreground/80 font-medium flex items-center gap-1">
+              <Flame className="h-3 w-3 text-orange-500" />
+              <span className="text-foreground font-bold">15 people</span> are viewing this product right now
             </p>
           </div>
 
@@ -287,15 +291,15 @@ export default function ProductPage({ params }: PageProps) {
           {/* Value Propositions */}
           <div className="pt-2 flex justify-center gap-6 text-[10px] text-muted-foreground">
             <div className="flex items-center gap-1.5">
-              <span className="text-foreground">🚚</span>
+              <Truck className="h-3.5 w-3.5 text-foreground" />
               <span>Free Shipping</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <span className="text-foreground">🔄</span>
+              <RefreshCw className="h-3.5 w-3.5 text-foreground" />
               <span>Easy Returns</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <span className="text-foreground">🛡️</span>
+              <ShieldCheck className="h-3.5 w-3.5 text-foreground" />
               <span>Secure Payment</span>
             </div>
           </div>

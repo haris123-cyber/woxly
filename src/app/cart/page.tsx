@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Trash2, Plus, Minus, ArrowRight, ShoppingBag, ShieldCheck } from "lucide-react";
+import { Trash2, Plus, Minus, ArrowRight, ShoppingBag, ShieldCheck, Sparkles } from "lucide-react";
 import { useCartStore } from "@/store/cartStore";
 import { formatPrice } from "@/lib/utils";
 import { MOCK_PRODUCTS } from "@/data/products";
@@ -48,7 +48,7 @@ export default function CartPage() {
       <div className="bg-card text-card-foreground border border-border p-5 rounded-2xl">
         <p className="font-bold mb-2">
           {subtotal >= FREE_SHIPPING_THRESHOLD ? (
-            <span className="text-emerald-600 dark:text-emerald-400">🎉 Congratulations! You have unlocked Free Standard Shipping.</span>
+            <span className="text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5"><Sparkles className="h-3.5 w-3.5" /> Congratulations! You have unlocked Free Standard Shipping.</span>
           ) : (
             <span>
               You are only <span className="text-accent">{formatPrice(neededForFreeShipping)}</span> away from unlocking <span className="font-bold">Free Shipping</span>!

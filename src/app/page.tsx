@@ -5,10 +5,12 @@ import { MOCK_PRODUCTS } from "@/data/products";
 import ProductCard from "@/components/product/ProductCard";
 import ReviewsMarquee from "@/components/home/ReviewsMarquee";
 import NewsletterForm from "@/components/home/NewsletterForm";
+import PromoBanners from "@/components/home/PromoBanners";
 
 export default function HomePage() {
   const bestSellers = MOCK_PRODUCTS.slice(0, 4);
   const newArrivals = MOCK_PRODUCTS.slice(4, 8);
+  const fashionProducts = MOCK_PRODUCTS.filter(p => p.category === "Fashion");
 
   const reviews = [
     { review: "The produce is incredibly fresh, and the delivery is always on time. A lifesaver for my busy schedule!", name: "Amelia R." },
@@ -101,6 +103,9 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Promo Banners Peeking Carousel */}
+      <PromoBanners />
+
       {/* Best Sellers */}
       <section className="space-y-8">
         <div className="flex items-end justify-between">
@@ -175,6 +180,30 @@ export default function HomePage() {
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
           {newArrivals.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+      </section>
+
+      {/* Fashion Promo Banner & Collection */}
+      <section className="space-y-8">
+        <div className="rounded-[2rem] md:rounded-[2.5rem] overflow-hidden w-full shadow-md border border-border/10">
+          <Link href="/shop?category=Fashion" className="block w-full relative group">
+            <Image
+              src="/images/banners/fashion_banner.jpg"
+              alt="Limited Time 50% Off Fashion Items"
+              width={1280}
+              height={670}
+              className="w-full h-auto object-cover group-hover:scale-[1.015] transition-transform duration-500"
+              priority={false}
+            />
+            <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+          </Link>
+        </div>
+
+        {/* Fashion Collection Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+          {fashionProducts.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>
