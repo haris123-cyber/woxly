@@ -62,11 +62,11 @@ export default function HomePage() {
       <section className="px-4 sm:px-6 lg:px-8 -mt-12 relative z-20 max-w-7xl mx-auto mb-16">
         <div className="flex overflow-x-auto pb-4 hide-scrollbar gap-3 md:grid md:grid-cols-6 md:gap-3 md:overflow-visible snap-x">
           {[
-            { name: "Vegetable",       subtitle: "Local market",      img: "/images/products/grocery_cabbage.png" },
+            { name: "Vegetable", subtitle: "Local market", img: "/images/products/grocery_cabbage.png" },
             { name: "Snacks & Breads", subtitle: "In-store delivery", img: "/images/products/grocery_lays.png" },
-            { name: "Fruits",          subtitle: "Chemical free",     img: "/images/products/grocery_avocado.png" },
-            { name: "Meat",            subtitle: "Frozen Meat",       img: "/images/products/grocery_beef.png" },
-            { name: "Home",            subtitle: "Essentials",        img: "/images/products/home_candles.png" },
+            { name: "Fruits", subtitle: "Chemical free", img: "/images/products/grocery_avocado.png" },
+            { name: "Meat", subtitle: "Frozen Meat", img: "/images/products/grocery_beef.png" },
+            { name: "Home", subtitle: "Essentials", img: "/images/products/home_candles.png" },
           ].map((cat) => (
             <Link
               key={cat.name}
@@ -113,8 +113,12 @@ export default function HomePage() {
             <span className="text-[10px] font-bold uppercase tracking-wider text-primary">Best Sellers</span>
             <h2 className="text-3xl md:text-4xl font-black tracking-tight text-foreground mt-2">Loved by 1000+ customers</h2>
           </div>
-          <Link href="/shop" className="text-xs font-bold text-foreground hover:text-primary flex items-center gap-1 transition-colors">
-            Shop all <ArrowRight className="h-3.5 w-3.5" />
+          <Link
+            href="/shop"
+            className="flex shrink-0 items-center gap-1 whitespace-nowrap text-xs font-bold text-foreground hover:text-primary transition-colors"
+          >
+            Shop all
+            <ArrowRight className="h-3.5 w-3.5" />
           </Link>
         </div>
 
@@ -223,10 +227,10 @@ export default function HomePage() {
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:pt-12 md:pb-12">
             {[
-              { icon: Truck,       title: "Lightning Delivery",   desc: "At your door in under 15 min.", badge: "15 min" },
+              { icon: Truck, title: "Lightning Delivery", desc: "At your door in under 15 min.", badge: "15 min" },
               { icon: ShieldCheck, title: "Freshness Guaranteed", desc: "Sourced daily from local farms.", badge: "100% Fresh" },
-              { icon: RotateCcw,   title: "Easy Replacements",    desc: "We replace it, no questions.",   badge: "No hassle" },
-              { icon: Box,         title: "Eco-Friendly",         desc: "100% recyclable packaging.",     badge: "Zero waste" },
+              { icon: RotateCcw, title: "Easy Replacements", desc: "We replace it, no questions.", badge: "No hassle" },
+              { icon: Box, title: "Eco-Friendly", desc: "100% recyclable packaging.", badge: "Zero waste" },
             ].map((feature, i) => (
               <Link key={i} href="/shop" className="group bg-background border border-border rounded-2xl p-3.5 md:p-6 flex flex-col gap-2.5 md:gap-4 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
                 <div className="self-start bg-primary/10 p-2 md:p-2.5 rounded-xl text-primary">

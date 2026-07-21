@@ -35,12 +35,13 @@ export default function PromoBanners() {
   }, [isHovered]);
 
   return (
-    <section 
+    <section
       className="relative w-full overflow-hidden py-10 select-none bg-slate-50/50 dark:bg-zinc-950/20 rounded-3xl border border-gray-100 dark:border-zinc-900/50"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style dangerouslySetInnerHTML={{
+        __html: `
         .banners-track-container {
           --card-width: 290px;
           --card-gap: 16px;
@@ -65,27 +66,11 @@ export default function PromoBanners() {
           <h2 className="text-2xl md:text-3xl font-black tracking-tight text-foreground mt-1">Deals of the Week</h2>
         </div>
 
-        {/* Manual Arrow Controls */}
-        <div className="flex gap-2">
-          <button
-            onClick={handlePrev}
-            className="h-10 w-10 rounded-full bg-white dark:bg-zinc-900 border border-border flex items-center justify-center text-foreground hover:bg-muted transition-colors shadow-sm cursor-pointer"
-            aria-label="Previous banner"
-          >
-            <ChevronLeft className="h-5 w-5" />
-          </button>
-          <button
-            onClick={handleNext}
-            className="h-10 w-10 rounded-full bg-white dark:bg-zinc-900 border border-border flex items-center justify-center text-foreground hover:bg-muted transition-colors shadow-sm cursor-pointer"
-            aria-label="Next banner"
-          >
-            <ChevronRight className="h-5 w-5" />
-          </button>
-        </div>
+
       </div>
 
       {/* Carousel Track wrapper */}
-      <div 
+      <div
         className="banners-track-container relative w-full flex items-center h-[170px] sm:h-[300px] md:h-[420px] overflow-hidden"
       >
         <motion.div
@@ -136,7 +121,7 @@ export default function PromoBanners() {
                     className="object-cover pointer-events-none"
                     priority={isActive}
                   />
-                  
+
                   {/* Subtle hover gradient overlay */}
                   <div className="absolute inset-0 bg-black/5 opacity-0 hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
                 </Link>
@@ -146,19 +131,7 @@ export default function PromoBanners() {
         </motion.div>
       </div>
 
-      {/* Dot Indicators */}
-      <div className="flex justify-center gap-2 mt-6">
-        {BANNERS.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => setActiveIndex(index)}
-            className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
-              index === activeIndex ? "bg-primary w-8" : "bg-muted-foreground/30 w-2.5 hover:bg-muted-foreground/50"
-            }`}
-            aria-label={`Go to slide ${index + 1}`}
-          />
-        ))}
-      </div>
+
     </section>
   );
 }

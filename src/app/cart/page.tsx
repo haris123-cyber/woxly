@@ -2,15 +2,48 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Trash2, Plus, Minus, ArrowRight, ShoppingBag, ShieldCheck, Sparkles } from "lucide-react";
+import { Trash2, Plus, Minus, ArrowRight, ShoppingBag, ShieldCheck, Tag, X, CheckCircle2 } from "lucide-react";
 import { useCartStore } from "@/store/cartStore";
 import { formatPrice } from "@/lib/utils";
 import { MOCK_PRODUCTS } from "@/data/products";
+import { useState } from "react";
+
+const VALID_COUPONS: Record<string, { discount: number; label: string }> = {
+  WOXLY20: { discount: 0.10, label: "10% off" },
+  SAVE20: { discount: 0.20, label: "20% off" },
+};
 
 export default function CartPage() {
   const { cart, updateQuantity, removeFromCart, addToCart } = useCartStore();
 
+  // Coupon state
+  const [couponInput, setCouponInput] = useState("");
+  const [appliedCoupon, setAppliedCoupon] = useState<string | null>(null);
+  const [couponError, setCouponError] = useState("");
+  const [couponSuccess, setCouponSuccess] = useState("");
+
+  const applyCoupon = () => {
+    const code = couponInput.trim().toUpperCase();
+    if (!code) return;
+    if (VALID_COUPONS[code]) {
+      setAppliedCoupon(code);
+      setCouponSuccess(`Coupon applied: ${VALID_COUPONS[code].label}`);
+      setCouponError("");
+      setCouponInput("");
+    } else {
+      setCouponError("Invalid coupon code. Try Later.");
+      setCouponSuccess("");
+    }
+  };
+
+  const removeCoupon = () => {
+    setAppliedCoupon(null);
+    setCouponSuccess("");
+    setCouponError("");
+  };
+
   const subtotal = cart.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
+  const couponDiscount = appliedCoupon ? subtotal * VALID_COUPONS[appliedCoupon].discount : 0;
   const FREE_SHIPPING_THRESHOLD = 50;
   const progressPercent = Math.min((subtotal / FREE_SHIPPING_THRESHOLD) * 100, 100);
   const neededForFreeShipping = Math.max(FREE_SHIPPING_THRESHOLD - subtotal, 0);
@@ -48,7 +81,7 @@ export default function CartPage() {
       <div className="bg-card text-card-foreground border border-border p-5 rounded-2xl">
         <p className="font-bold mb-2">
           {subtotal >= FREE_SHIPPING_THRESHOLD ? (
-            <span className="text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5"><Sparkles className="h-3.5 w-3.5" /> Congratulations! You have unlocked Free Standard Shipping.</span>
+            <span className="text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5"> Congratulations! You have unlocked Free Standard Shipping.</span>
           ) : (
             <span>
               You are only <span className="text-accent">{formatPrice(neededForFreeShipping)}</span> away from unlocking <span className="font-bold">Free Shipping</span>!
@@ -203,9 +236,68 @@ export default function CartPage() {
             </div>
           </div>
 
+          {/* Coupon Code Input */}
+          <div className="space-y-2 py-2 border-b border-border">
+            <p className="text-[10px] font-black uppercase tracking-wider text-foreground flex items-center gap-1.5">
+              <Tag className="h-3 w-3" /> Coupon Code
+            </p>
+
+            {appliedCoupon ? (
+              <div className="flex items-center justify-between bg-emerald-500/10 border border-emerald-500/30 rounded-lg px-3 py-2">
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500 flex-shrink-0" />
+                  <div>
+                    <p className="text-[10px] font-black text-emerald-600 dark:text-emerald-400">{appliedCoupon}</p>
+                    <p className="text-[9px] text-emerald-600/70 dark:text-emerald-400/70">{couponSuccess}</p>
+                  </div>
+                </div>
+                <button
+                  onClick={removeCoupon}
+                  className="text-muted-foreground hover:text-red-500 transition-colors cursor-pointer"
+                  aria-label="Remove coupon"
+                >
+                  <X className="h-3.5 w-3.5" />
+                </button>
+              </div>
+            ) : (
+              <div className="flex gap-2">
+                <input
+                  id="coupon-code-input"
+                  type="text"
+                  value={couponInput}
+                  onChange={(e) => { setCouponInput(e.target.value); setCouponError(""); }}
+                  onKeyDown={(e) => e.key === "Enter" && applyCoupon()}
+                  placeholder="Enter coupon code"
+                  className="flex-1 min-w-0 bg-background border border-border rounded-lg px-3 py-2 text-[11px] font-semibold text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors uppercase"
+                />
+                <button
+                  onClick={applyCoupon}
+                  className="bg-primary text-primary-foreground text-[10px] font-black px-3 py-2 rounded-lg hover:bg-primary/90 transition-colors cursor-pointer flex-shrink-0"
+                >
+                  Apply
+                </button>
+              </div>
+            )}
+
+            {couponError && (
+              <p className="text-[10px] text-red-500 font-semibold flex items-center gap-1">
+                <X className="h-3 w-3" /> {couponError}
+              </p>
+            )}
+          </div>
+
+          <div className="space-y-2 pb-2">
+            {couponDiscount > 0 && (
+              <div className="flex justify-between text-emerald-600 dark:text-emerald-400">
+                <span className="font-medium text-[10px]">Discount ({VALID_COUPONS[appliedCoupon!].label})</span>
+                <span className="font-bold">-{formatPrice(couponDiscount)}</span>
+              </div>
+            )}
+          </div>
+
           <div className="flex justify-between text-sm font-black text-foreground pt-1">
             <span>Total</span>
-            <span>{formatPrice(subtotal + (subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : 4.99) + subtotal * 0.08)}</span>
+            <span>{formatPrice(subtotal - couponDiscount + (subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : 4.99) + subtotal * 0.08)}</span>
           </div>
 
           <Link

@@ -74,52 +74,50 @@ function AccountContent() {
       <h1 className="text-2xl font-black uppercase tracking-wider text-foreground">My Account</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-        {/* Mobile Horizontal Navigation Tabs */}
-        <div className="md:hidden flex overflow-x-auto gap-2 pb-3 border-b border-border/60 hide-scrollbar snap-x -mx-4 px-4">
-          {[
-            { id: "dashboard", label: "Dashboard", icon: User },
-            { id: "orders", label: "My Orders", icon: ShoppingBag, badge: orders.length },
-            { id: "wishlist", label: "Wishlist", icon: Heart, badge: wishlist.length },
-            { id: "profile", label: "Profile", icon: User },
-            { id: "addresses", label: "Addresses", icon: MapPin },
-          ].map((tab) => {
-            const Icon = tab.icon;
-            const isActive = activeTab === tab.id;
-            return (
-              <button
-                key={tab.id}
-                onClick={() => changeTab(tab.id)}
-                className={`flex-shrink-0 snap-start flex items-center gap-1.5 px-4 py-2.5 rounded-full text-[10px] font-bold tracking-wider uppercase transition-all border cursor-pointer ${
-                  isActive
-                    ? "bg-primary text-primary-foreground border-primary shadow-sm"
-                    : "bg-white text-slate-700 hover:text-foreground border-slate-200"
-                }`}
-              >
-                <Icon className="h-3.5 w-3.5" />
-                <span>{tab.label}</span>
-                {tab.badge !== undefined && tab.badge > 0 && (
-                  <span
-                    className={`text-[9px] font-black h-4 w-4 rounded-full flex items-center justify-center ${
-                      isActive ? "bg-white text-primary" : "bg-slate-100 text-slate-800"
+        {/* Mobile Quick Actions */}
+        <div className="md:hidden">
+
+          <div className="grid grid-cols-2 gap-3">
+            {[
+              { id: "orders", label: "My Orders", icon: ShoppingBag, badge: orders.length },
+              { id: "wishlist", label: "Wishlist", icon: Heart, badge: wishlist.length },
+              { id: "addresses", label: "Addresses", icon: MapPin },
+              { id: "profile", label: "Profile", icon: User },
+            ].map((tab) => {
+              const Icon = tab.icon;
+              const isActive = activeTab === tab.id;
+
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => changeTab(tab.id)}
+                  className={`relative flex items-center gap-3 rounded-2xl border px-4 py-4 transition-all
+          ${isActive
+                      ? "border-primary bg-primary/5"
+                      : "border-border bg-background hover:bg-muted"
                     }`}
+                >
+                  <Icon
+                    className={`h-5 w-5 ${isActive ? "text-primary" : "text-muted-foreground"
+                      }`}
+                  />
+
+                  <span
+                    className={`text-sm font-medium ${isActive ? "text-primary" : "text-foreground"
+                      }`}
                   >
-                    {tab.badge}
+                    {tab.label}
                   </span>
-                )}
-              </button>
-            );
-          })}
-          <button
-            onClick={handleLogout}
-            className="flex-shrink-0 snap-start flex items-center gap-1.5 px-4 py-2.5 rounded-full text-[10px] font-bold tracking-wider uppercase transition-all border border-red-200 text-red-600 bg-red-50 hover:bg-red-100 cursor-pointer"
-          >
-            <LogOut className="h-3.5 w-3.5" />
-            <span>Logout</span>
-          </button>
+
+
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         {/* Navigation Sidebar (Desktop only) */}
-        <aside className="hidden md:block bg-background text-foreground border border-border p-4 rounded-md h-fit space-y-1">
+        <aside className="hidden md:block bg-background text-foreground border border-border px-5 p-4 rounded-md h-fit space-y-1">
           {[
             { id: "dashboard", label: "Dashboard", icon: User },
             { id: "orders", label: "My Orders", icon: ShoppingBag, badge: orders.length },
@@ -132,19 +130,17 @@ function AccountContent() {
               <button
                 key={tab.id}
                 onClick={() => changeTab(tab.id)}
-                className={`w-full text-left py-3 px-4 rounded-md flex items-center gap-3 transition-colors cursor-pointer ${
-                  activeTab === tab.id
-                    ? "bg-muted text-foreground font-bold"
-                    : "hover:bg-muted/50 text-muted-foreground hover:text-foreground"
-                }`}
+                className={`w-full text-left py-3 px-4 rounded-md flex items-center gap-3 transition-colors cursor-pointer ${activeTab === tab.id
+                  ? "bg-muted text-foreground font-bold"
+                  : "hover:bg-muted/50 text-muted-foreground hover:text-foreground"
+                  }`}
               >
                 <Icon className="h-4.5 w-4.5" />
                 <span>{tab.label}</span>
                 {tab.badge !== undefined && tab.badge > 0 && (
                   <span
-                    className={`ml-auto text-[9px] font-bold h-4 w-4 rounded-full flex items-center justify-center ${
-                      activeTab === tab.id ? "bg-foreground text-background" : "bg-muted text-foreground"
-                    }`}
+                    className={`ml-auto text-[9px] font-bold h-4 w-4 rounded-full flex items-center justify-center ${activeTab === tab.id ? "bg-foreground text-background" : "bg-muted text-foreground"
+                      }`}
                   >
                     {tab.badge}
                   </span>
@@ -152,13 +148,7 @@ function AccountContent() {
               </button>
             );
           })}
-          <button
-            onClick={handleLogout}
-            className="w-full text-left py-3 px-4 rounded-md flex items-center gap-3 text-red-500 hover:bg-red-500/10 transition-colors mt-4 cursor-pointer"
-          >
-            <LogOut className="h-4.5 w-4.5" />
-            <span>Logout</span>
-          </button>
+
         </aside>
 
         {/* Tab panels (Right Column) */}
@@ -167,13 +157,39 @@ function AccountContent() {
           {activeTab === "dashboard" && (
             <div className="bg-background border border-border p-6 rounded-md space-y-6">
               <div>
-                <h2 className="text-sm font-black uppercase tracking-wider text-foreground">
-                  Hello, John Doe!
+                <span className="text-[11px] uppercase tracking-[0.2em] font-bold text-primary">
+                  Welcome Back
+                </span>
+
+                <h2 className="mt-2 text-3xl font-black text-foreground">
+                  Hello, John Doe 👋
                 </h2>
-                <p className="text-[11px] text-muted-foreground mt-1 font-medium">
-                  Welcome to your customer portal dashboard. Here you can inspect recent orders, review wishlist items, and update details.
+
+                <p className="mt-3 max-w-xl text-sm text-muted-foreground leading-7">
+                  Manage your orders, wishlist, saved addresses and profile
+                  information from one place. Continue shopping or track your
+                  latest purchases below.
                 </p>
+
+                <div className="flex gap-3 mt-6">
+
+                  <Link
+                    href="/shop"
+                    className="bg-primary text-primary-foreground px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition"
+                  >
+                    Continue Shopping
+                  </Link>
+
+                  <Link
+                    href="/track-order"
+                    className="border border-slate-300 px-6 py-3 rounded-xl font-semibold hover:bg-slate-50 transition"
+                  >
+                    Track Order
+                  </Link>
+
+                </div>
               </div>
+
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="border border-border/80 p-4 rounded-md flex items-center gap-4 bg-muted/20">
@@ -226,13 +242,12 @@ function AccountContent() {
                         <span className="font-bold text-foreground">{order.id}</span>
                       </div>
                       <span
-                        className={`font-black uppercase tracking-wider px-2 py-0.5 rounded text-[8px] ${
-                          order.status === "Delivered"
-                            ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
-                            : order.status === "Cancelled"
+                        className={`font-black uppercase tracking-wider px-2 py-0.5 rounded text-[8px] ${order.status === "Delivered"
+                          ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+                          : order.status === "Cancelled"
                             ? "bg-red-500/10 text-red-500"
                             : "bg-amber-500/10 text-amber-600 dark:text-amber-400"
-                        }`}
+                          }`}
                       >
                         {order.status}
                       </span>
@@ -362,9 +377,8 @@ function AccountContent() {
                     <input
                       type="text"
                       {...register("fullName")}
-                      className={`w-full bg-background text-foreground p-3 rounded-md border focus:outline-none focus:border-foreground ${
-                        errors.fullName ? "border-red-500" : "border-border"
-                      }`}
+                      className={`w-full bg-background text-foreground p-3 rounded-md border focus:outline-none focus:border-foreground ${errors.fullName ? "border-red-500" : "border-border"
+                        }`}
                     />
                     {errors.fullName && <p className="text-red-500 text-[10px] mt-1 font-bold">{errors.fullName.message}</p>}
                   </div>
@@ -374,9 +388,8 @@ function AccountContent() {
                     <input
                       type="email"
                       {...register("email")}
-                      className={`w-full bg-background text-foreground p-3 rounded-md border focus:outline-none focus:border-foreground ${
-                        errors.email ? "border-red-500" : "border-border"
-                      }`}
+                      className={`w-full bg-background text-foreground p-3 rounded-md border focus:outline-none focus:border-foreground ${errors.email ? "border-red-500" : "border-border"
+                        }`}
                     />
                     {errors.email && <p className="text-red-500 text-[10px] mt-1 font-bold">{errors.email.message}</p>}
                   </div>
@@ -386,9 +399,8 @@ function AccountContent() {
                     <input
                       type="tel"
                       {...register("phone")}
-                      className={`w-full bg-background text-foreground p-3 rounded-md border focus:outline-none focus:border-foreground ${
-                        errors.phone ? "border-red-500" : "border-border"
-                      }`}
+                      className={`w-full bg-background text-foreground p-3 rounded-md border focus:outline-none focus:border-foreground ${errors.phone ? "border-red-500" : "border-border"
+                        }`}
                     />
                     {errors.phone && <p className="text-red-500 text-[10px] mt-1 font-bold">{errors.phone.message}</p>}
                   </div>
