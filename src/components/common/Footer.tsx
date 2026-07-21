@@ -1,10 +1,8 @@
-"use client";
-
 import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="bg-primary-foreground text-foreground border-t border-border mt-auto transition-colors duration-200">
+    <footer suppressHydrationWarning className="bg-primary-foreground text-foreground border-t border-border mt-auto transition-colors duration-200">
       {/* Main Footer Links */}
       <div className="mx-auto max-w-7xl px-4 py-12 md:py-16 sm:px-6 lg:px-8 grid grid-cols-2 md:grid-cols-6 gap-8 lg:gap-12">
         {/* Brand Info */}
@@ -35,10 +33,10 @@ export default function Footer() {
           <h3 className="text-xs font-bold capitalize">Shop</h3>
           <div className="flex flex-col gap-3 text-xs text-muted-foreground font-medium">
             <Link href="/shop" className="hover:text-foreground transition-colors">All Products</Link>
-            <Link href="/shop?category=Sneakers" className="hover:text-foreground transition-colors">Sneakers</Link>
-            <Link href="/shop?category=Clothing" className="hover:text-foreground transition-colors">Clothing</Link>
-            <Link href="/shop?category=Accessories" className="hover:text-foreground transition-colors">Accessories</Link>
-            <Link href="/shop?category=Watches" className="hover:text-foreground transition-colors">Watches</Link>
+            <Link href="/shop?category=Vegetables" className="hover:text-foreground transition-colors">Vegetables</Link>
+            <Link href="/shop?category=Fruits" className="hover:text-foreground transition-colors">Fruits</Link>
+            <Link href="/shop?category=Snacks+%26+Breads" className="hover:text-foreground transition-colors">Snacks & Breads</Link>
+            <Link href="/shop?category=Meat" className="hover:text-foreground transition-colors">Meat & Seafood</Link>
           </div>
         </div>
 

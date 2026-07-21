@@ -34,8 +34,8 @@ export default function Header() {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const autocompleteRef = useRef<HTMLDivElement>(null);
 
-  // Total cart items count
-  const cartItemCount = cart.reduce((acc, item) => acc + item.quantity, 0);
+  // Total cart items count (guarded with mounted to prevent hydration mismatch with localStorage)
+  const cartItemCount = mounted ? cart.reduce((acc, item) => acc + item.quantity, 0) : 0;
 
   useEffect(() => {
     setMounted(true);
@@ -91,21 +91,6 @@ export default function Header() {
     setShowSuggestions(false);
   };
 
-  if (!mounted) {
-    // Return placeholder markup to prevent hydration layout shifts
-    return (
-      <header className="sticky top-0 z-40 w-full bg-primary text-primary-foreground border-b border-primary/10">
-        <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <div className="text-2xl font-black tracking-wider flex items-center gap-2">
-            <ShoppingBag className="h-6 w-6 text-accent" />
-            Woxly
-          </div>
-          <div className="h-12 w-full max-w-xl mx-8 bg-white/10 animate-pulse rounded-full hidden md:block" />
-          <div className="flex gap-4 h-10 w-32 bg-white/10 animate-pulse rounded-full" />
-        </div>
-      </header>
-    );
-  }
 
   return (
     <>
@@ -132,11 +117,11 @@ export default function Header() {
               <div className="relative flex items-center bg-white rounded-full shadow-sm overflow-hidden border-2 border-transparent focus-within:border-accent transition-colors" suppressHydrationWarning>
                 <input
                   type="search"
+                  suppressHydrationWarning
                   placeholder="Search for Grocery, Stores, Vegetable or Meat..."
                   value={searchQuery}
                   onChange={handleSearchChange}
                   onFocus={() => searchQuery.trim().length > 1 && setShowSuggestions(true)}
-                  suppressHydrationWarning
                   className="w-full bg-transparent text-gray-900 text-sm pl-6 pr-12 py-3.5 focus:outline-none placeholder:text-gray-500 font-medium"
                 />
                 <button type="submit" aria-label="Search" suppressHydrationWarning className="absolute right-4 text-gray-400 hover:text-gray-700 transition-colors">
@@ -198,6 +183,7 @@ export default function Header() {
               </div>
 
               <button
+                suppressHydrationWarning
                 onClick={() => setCartOpen(true)}
                 className="relative hidden sm:flex items-center justify-center h-10 w-10 bg-white rounded-full hover:bg-gray-100 transition-colors shadow-sm cursor-pointer"
                 aria-label="Open Cart"
@@ -347,6 +333,7 @@ export default function Header() {
           <span className="text-[9px] mt-0.5 font-medium">Search</span>
         </Link>
         <button
+          suppressHydrationWarning
           onClick={() => setCartOpen(true)}
           className="flex flex-col items-center justify-center text-muted-foreground hover:text-foreground active:text-accent w-14 h-12 relative cursor-pointer"
         >

@@ -41,7 +41,7 @@ export default function AnnouncementBar() {
         <span>Free Shipping on orders over ₹50</span>
         <div className="flex items-center gap-1 font-mono bg-white/10 px-2 py-0.5 rounded border border-white/5">
           <span>Ends in</span>
-          <span className="text-amber-400 font-bold">
+          <span className="text-amber-400 font-bold" suppressHydrationWarning>
             {formatNumber(timeLeft.hours)}:{formatNumber(timeLeft.minutes)}:{formatNumber(timeLeft.seconds)}
           </span>
         </div>
