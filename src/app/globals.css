@@ -1,0 +1,177 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --background: #F6F7F9;
+  --foreground: #14241F;
+  --card: #ffffff;
+  --card-foreground: #14241F;
+  --popover: #ffffff;
+  --popover-foreground: #14241F;
+  --primary: #0D5A4A;
+  --primary-foreground: #ffffff;
+  --announcementbar: #217262;
+  --secondary: #ffffff;
+  --secondary-foreground: #0D5A4A;
+  --muted: #E8EFEA;
+  --muted-foreground: #6B7280;
+  --accent: #B6E13D;
+  --accent-foreground: #000000;
+  --border: #E8EFEA;
+  --input: #E8EFEA;
+  --ring: #0D5A4A;
+  --radius: 1rem;
+}
+
+.dark {
+  --background: #14241F;
+  --foreground: #F6F7F9;
+  --card: #1A2E28;
+  --card-foreground: #F6F7F9;
+  --popover: #14241F;
+  --popover-foreground: #F6F7F9;
+  --primary: #C8F64A;
+  --primary-foreground: #14241F;
+  --announcementbar: #217262;
+  --secondary: #1A2E28;
+  --secondary-foreground: #C8F64A;
+  --muted: #1A2E28;
+  --muted-foreground: #9CA3AF;
+  --accent: #0D5A4A;
+  --accent-foreground: #ffffff;
+  --border: #1A2E28;
+  --input: #1A2E28;
+  --ring: #C8F64A;
+}
+
+@theme {
+  --font-playfair: var(--font-playfair), "Playfair Display", serif;
+  --font-outfit: var(--font-outfit), "Outfit", sans-serif;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-announcementbar: var(--announcementbar);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+}
+
+body {
+  font-family: var(--font-outfit);
+  background-color: var(--background);
+  color: var(--foreground);
+  font-feature-settings: "rlig" 1, "calt" 1;
+  min-height: 100vh;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-playfair);
+}
+
+/* Custom Accessibility Styles */
+*:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Slide in animation for sticky cart */
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Fade in scale */
+@keyframes fade-in-scale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fade-in-scale {
+  animation: fade-in-scale 0.2s ease-out forwards;
+}
+
+.animate-fade-in-scale {
+  animation: fade-in-scale 0.2s ease-out forwards;
+}
+
+/* Hero heading fade-in (replaces framer-motion — zero JS cost) */
+@keyframes hero-fade {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-hero-fade {
+  animation: hero-fade 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
