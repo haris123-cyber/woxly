@@ -65,7 +65,7 @@ export default function Header() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
- 
+
   // Lock body scroll when mobile menu is open
   useEffect(() => {
     if (mobileMenuOpen) {
@@ -392,6 +392,16 @@ export default function Header() {
                     <MessageSquare className="h-5 w-5 text-[#1e293b] group-hover:text-primary transition-colors" />
                     <span>FEEDBACK</span>
                   </Link>
+                  <Link
+                    href="/login"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-4 px-3 py-2 rounded-xl hover:bg-muted font-bold text-xs text-slate-800 tracking-wider transition-colors group"
+                  >
+                    <User className="h-5 w-5 text-[#1e293b] group-hover:text-primary transition-colors" />
+                    <span>LOGOUT</span>
+                  </Link>
+
+
                   <Link
                     href="/contact"
                     onClick={() => setMobileMenuOpen(false)}

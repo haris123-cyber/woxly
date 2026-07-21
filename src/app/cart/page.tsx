@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Trash2, Plus, Minus, ArrowRight, ShoppingBag, ShieldCheck, Tag, X, CheckCircle2 } from "lucide-react";
+import { Trash2, Plus, Minus, ArrowRight, ShoppingBag, ShieldCheck, X } from "lucide-react";
 import { useCartStore } from "@/store/cartStore";
 import { formatPrice } from "@/lib/utils";
 import { MOCK_PRODUCTS } from "@/data/products";
@@ -239,13 +239,14 @@ export default function CartPage() {
           {/* Coupon Code Input */}
           <div className="space-y-2 py-2 border-b border-border">
             <p className="text-[10px] font-black uppercase tracking-wider text-foreground flex items-center gap-1.5">
-              <Tag className="h-3 w-3" /> Coupon Code
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2H2v10l9.29 9.29a1 1 0 0 0 1.41 0l6.59-6.59a1 1 0 0 0 0-1.41z"/><circle cx="7" cy="7" r="1"/></svg>
+              Coupon Code
             </p>
 
             {appliedCoupon ? (
               <div className="flex items-center justify-between bg-emerald-500/10 border border-emerald-500/30 rounded-lg px-3 py-2">
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500 flex-shrink-0" />
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 text-emerald-500 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
                   <div>
                     <p className="text-[10px] font-black text-emerald-600 dark:text-emerald-400">{appliedCoupon}</p>
                     <p className="text-[9px] text-emerald-600/70 dark:text-emerald-400/70">{couponSuccess}</p>

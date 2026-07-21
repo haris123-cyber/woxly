@@ -2,8 +2,8 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
-  transpilePackages: ["lucide-react"],
   allowedDevOrigins: ["127.0.0.1", "localhost"],
+
 
   // Compress responses with gzip/brotli
   compress: true,
