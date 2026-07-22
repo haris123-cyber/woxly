@@ -3,15 +3,14 @@
 import * as React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useParams } from "next/navigation";
 import { ArrowLeft, Clock, User, MessageSquare, XCircle } from "lucide-react";
 import { MOCK_BLOGS } from "@/data/blogs";
 
-interface PageProps {
-  params: React.Usable<{ slug: string }>;
-}
-
-export default function BlogDetailPage({ params }: PageProps) {
-  const { slug } = React.use(params);
+export default function BlogDetailPage() {
+  const params = useParams();
+  const rawSlug = params?.slug;
+  const slug = typeof rawSlug === "string" ? rawSlug : Array.isArray(rawSlug) ? rawSlug[0] : "";
   const post = MOCK_BLOGS.find((b) => b.slug === slug);
 
   if (!post) {

@@ -6,9 +6,10 @@ import Image from "next/image";
 interface ProductGalleryProps {
   images: string[];
   name: string;
+  isApiProduct?: boolean;
 }
 
-export default function ProductGallery({ images, name }: ProductGalleryProps) {
+export default function ProductGallery({ images, name, isApiProduct = false }: ProductGalleryProps) {
   const [activeImageIndex, setActiveImageIndex] = useState(0);
 
   // Fallback if no images provided
@@ -45,7 +46,9 @@ export default function ProductGallery({ images, name }: ProductGalleryProps) {
           alt={name}
           fill
           sizes="(max-width: 768px) 100vw, 50vw"
-          className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+          className={`transition-transform duration-500 ease-out group-hover:scale-105 ${
+            isApiProduct ? "object-contain p-8 bg-white" : "object-cover"
+          }`}
           priority
         />
       </div>

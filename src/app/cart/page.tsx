@@ -110,7 +110,7 @@ export default function CartPage() {
                   alt={item.product.name || "Product image"}
                   fill
                   sizes="80px"
-                  className="object-cover"
+                  className={String(item.product.id).startsWith("api-") ? "object-contain p-2 bg-white" : "object-cover"}
                 />
               </div>
 
@@ -192,7 +192,7 @@ export default function CartPage() {
                           alt={rec.name || "Product image"}
                           fill
                           sizes="100px"
-                          className="object-cover"
+                          className={String(rec.id).startsWith("api-") ? "object-contain p-2 bg-white" : "object-cover"}
                         />
                       </div>
                       <div className="truncate text-left text-[11px]">

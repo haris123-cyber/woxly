@@ -21,7 +21,7 @@ export default function HomePage() {
 
   return (
     <div className="pt-0 pb-20">
-      <div className="p-0 m-0">
+      <div className="-mx-4 sm:-mx-6 lg:-mx-8 mb-0 p-0 overflow-hidden">
         <section
           className="relative h-[320px] sm:h-[450px] md:h-[700px] overflow-hidden"
         >
@@ -41,7 +41,7 @@ export default function HomePage() {
 
           {/* Content */}
 
-          <div className="relative z-20 max-w-[220px] sm:max-w-[280px] md:max-w-xl px-4 sm:px-6 lg:px-16 py-8 md:py-20">
+          <div className="relative z-20 max-w-[220px] sm:max-w-[280px] md:max-w-xl px-8 sm:px-12 lg:px-24 py-8 md:py-20">
 
             {/* Badge */}
 
@@ -140,7 +140,7 @@ export default function HomePage() {
       </div>
 
       {/* Gromuse Style Categories Grid */}
-      <section className="px-1 sm:px-6 lg:px-8  relative z-20 max-w-7xl mx-auto mt-5 -mb-10">
+      <section className="relative z-20 max-w-7xl mx-auto mt-5 -mb-10">
         <div className="text-left mb-3">
           <h2 className="text-1xl md:text-2xl font-black tracking-tight text-foreground mt-2">Shop by Category</h2>
         </div>
@@ -191,7 +191,7 @@ export default function HomePage() {
       <LazyPromoBanners />
 
       {/* Best Sellers */}
-      <section className="space-y-4 px-1 sm:px-6 lg:px-8 mt-8">
+      <section className="space-y-4 mt-1">
         <div className="flex items-end justify-between">
           <div className="text-left">
             <span className="text-[10px] font-bold uppercase tracking-wider text-primary">Best Sellers</span>
@@ -214,7 +214,7 @@ export default function HomePage() {
       </section>
 
       {/* Grocery Collection Banner */}
-      <section className="rounded-[2.5rem] bg-primary text-white p-8 md:p-16 flex flex-col md:flex-row items-center gap-12 overflow-hidden relative px-1 sm:px-6 lg:px-8 mt-8">
+      <section className="rounded-[2.5rem] bg-primary text-white p-6 md:p-16 flex flex-col md:flex-row items-center gap-12 overflow-hidden relative mt-8">
         <div className="flex-1 space-y-6 z-10">
           <span className="bg-white/10 backdrop-blur-md text-white text-[9px] font-black uppercase tracking-wider px-3 py-1.5 rounded-full border border-white/10">
             FARM FRESH
@@ -241,7 +241,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="flex-1 flex gap-4 w-full h-full z-10 px-1 sm:px-6 lg:px-8">
+        <div className="flex-1 flex gap-4 w-full h-full z-10">
           <div className="relative aspect-[3/4] w-1/2 rounded-2xl overflow-hidden transform translate-y-4 shadow-xl bg-white/5">
             <Image src="/images/products/grocery_cabbage.png" alt="Fresh Cabbage" fill sizes="(max-width: 768px) 50vw, 25vw" className="object-cover" />
           </div>
@@ -255,7 +255,7 @@ export default function HomePage() {
       </section>
 
       {/* New Arrivals */}
-      <section className="space-y-2 px-1 sm:px-6 lg:px-8 mt-8">
+      <section className="space-y-2 mt-8">
         <div className="flex items-end justify-between">
           <div className="text-left">
             <span className="text-[10px] font-bold uppercase tracking-wider text-primary">Fresh In</span>

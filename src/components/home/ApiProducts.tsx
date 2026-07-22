@@ -51,7 +51,7 @@ export default function ApiProducts() {
     }, []);
 
     return (
-        <section className="space-y-4 px-1 sm:px-6 lg:px-8 mt-8 ">
+        <section className="space-y-4 mt-8 ">
             <div className="flex items-end justify-between">
                 <div className="text-left">
                     <span className="text-[10px] font-bold uppercase tracking-wider text-primary">

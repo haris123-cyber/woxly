@@ -41,15 +41,15 @@ export default function PromoBanners() {
 
   return (
     <section
-      className="relative w-full overflow-hidden py-8 mt-8 select-none bg-slate-50/50 dark:bg-zinc-950/20 rounded-1xl border border-gray-100 dark:border-zinc-900/50"
+      className="relative w-full overflow-hidden py-8 mt-8 select-none bg-slate-50/50 dark:bg-zinc-950/20 rounded-2xl border border-gray-100 dark:border-zinc-900/50"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       <style dangerouslySetInnerHTML={{
         __html: `
         .banners-track-container {
-          --card-width: 290px;
-          --card-gap: 16px;
+          --card-width: calc(100vw - 32px);
+          --card-gap: 12px;
         }
         @media (min-width: 640px) {
           .banners-track-container {
@@ -65,7 +65,7 @@ export default function PromoBanners() {
         }
         @media (min-width: 1280px) {
           .banners-track-container {
-            --card-width: 1100px;
+            --card-width: 900px;
           }
         }
         @keyframes progress-fill { from { width: 0% } to { width: 100% } }
@@ -80,7 +80,7 @@ export default function PromoBanners() {
 
       {/* Carousel Track wrapper */}
       <div
-        className="banners-track-container relative w-full flex items-center h-[170px] sm:h-[300px] md:h-[420px] -mt-6 overflow-hidden"
+        className="banners-track-container relative w-full flex items-center h-[220px] sm:h-[320px] md:h-[460px] lg:h-[640px] -mt-6 overflow-hidden"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
@@ -97,11 +97,11 @@ export default function PromoBanners() {
             return (
               <div
                 key={banner.id}
-                className="relative flex-shrink-0 rounded-1xl overflow-hidden shadow-lg border border-border/10 bg-card cursor-pointer"
+                className="relative flex-shrink-0 rounded-3xl overflow-hidden shadow-lg border border-border/10 bg-card cursor-pointer"
                 style={{
                   width: "var(--card-width)",
-                  aspectRatio: "1.91 / 1",
-                  transform: isActive ? "scale(1)" : "scale(0.92)",
+                  aspectRatio: "16 / 9",
+                  transform: isActive ? "scale(1)" : "scale(0.95)",
                   opacity: isActive ? 1 : 0,
                   transition: "transform 0.5s ease, opacity 0.5s ease",
                 }}
