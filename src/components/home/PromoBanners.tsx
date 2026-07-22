@@ -36,7 +36,7 @@ export default function PromoBanners() {
 
   return (
     <section
-      className="relative w-full overflow-hidden py-10 select-none bg-slate-50/50 dark:bg-zinc-950/20 rounded-3xl border border-gray-100 dark:border-zinc-900/50"
+      className="relative w-full overflow-hidden py-8 mt-8 select-none bg-slate-50/50 dark:bg-zinc-950/20 rounded-3xl border border-gray-100 dark:border-zinc-900/50"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -71,7 +71,7 @@ export default function PromoBanners() {
 
       {/* Carousel Track wrapper */}
       <div
-        className="banners-track-container relative w-full flex items-center h-[170px] sm:h-[300px] md:h-[420px] overflow-hidden"
+        className="banners-track-container relative w-full flex items-center h-[170px] sm:h-[300px] md:h-[420px] -mt-6 overflow-hidden"
       >
         <motion.div
           drag="x"
@@ -98,8 +98,8 @@ export default function PromoBanners() {
               <motion.div
                 key={banner.id}
                 animate={{
-                  scale: isActive ? 1.0 : 0.94,
-                  opacity: isActive ? 1.0 : 0.4,
+                  scale: isActive ? 1 : 0.92,
+                  opacity: isActive ? 1 : 0,
                 }}
                 transition={{
                   type: "spring",
@@ -119,7 +119,7 @@ export default function PromoBanners() {
                     fill
                     sizes="(max-width: 768px) 300px, (max-width: 1200px) 550px, 750px"
                     className="object-cover pointer-events-none"
-                    priority={isActive}
+                    priority={index === 0}
                   />
 
                   {/* Subtle hover gradient overlay */}
@@ -129,6 +129,45 @@ export default function PromoBanners() {
             );
           })}
         </motion.div>
+      </div>
+      <div className="mt-6 flex justify-center">
+        {/* Mobile Dots */}
+        <div className="flex gap-2 sm:hidden">
+          {BANNERS.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setActiveIndex(index)}
+              className={`h-2 w-2 rounded-full transition-all duration-300 ${index === activeIndex
+                ? "w-6 bg-primary"
+                : "bg-gray-300 dark:bg-zinc-600"
+                }`}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
+        </div>
+
+        {/* Desktop Progress Bars */}
+        <div className="hidden sm:flex gap-2 w-56">
+          {BANNERS.map((_, index) => (
+            <div
+              key={index}
+              className="relative h-1.5 flex-1 rounded-full bg-gray-300 dark:bg-zinc-700 overflow-hidden"
+            >
+              {index === activeIndex && (
+                <motion.div
+                  key={activeIndex}
+                  initial={{ width: 0 }}
+                  animate={{ width: "100%" }}
+                  transition={{
+                    duration: AUTO_PLAY_INTERVAL / 1000,
+                    ease: "linear",
+                  }}
+                  className="absolute left-0 top-0 h-full bg-primary"
+                />
+              )}
+            </div>
+          ))}
+        </div>
       </div>
 
 

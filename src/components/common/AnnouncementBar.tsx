@@ -32,7 +32,7 @@ export default function AnnouncementBar() {
   const formatNumber = (num: number) => String(num).padStart(2, "0");
 
   return (
-    <div className="bg-announcementbar text-primary-foreground text-xs  py-2 px-4 flex flex-col sm:flex-row items-center justify-between gap-1 border-b border-border/10">
+    <div className="bg-announcementbar text-primary-foreground text-xs py-2 px-4 flex flex-col sm:flex-row items-center justify-between gap-1 relative z-10 -mb-[1px]">
       <div className="flex items-center gap-1.5 font-medium tracking-wide">
         <Sparkles className="h-3 w-3 text-amber-400 animate-pulse" />
         <span>FLASH SALE: USE CODE <span className="text-amber-400 font-bold">WOXLY20</span> FOR 20% OFF!</span>

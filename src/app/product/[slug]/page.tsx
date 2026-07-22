@@ -4,7 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Star, Heart, ShieldCheck, ChevronRight, XCircle, Flame, Truck, RefreshCw } from "lucide-react";
-import { MOCK_PRODUCTS } from "@/data/products";
+import { MOCK_PRODUCTS, Product } from "@/data/products";
 import ProductGallery from "@/components/product/ProductGallery";
 import StickyAddToCart from "@/components/product/StickyAddToCart";
 import FrequentlyBoughtTogether from "@/components/product/FrequentlyBoughtTogether";
@@ -23,7 +23,47 @@ export default function ProductPage({ params }: PageProps) {
   const router = useRouter();
 
   // Find product by slug
-  const product = MOCK_PRODUCTS.find((p) => p.slug === slug);
+  const localProduct = MOCK_PRODUCTS.find((p) => p.slug === slug);
+  const [product, setProduct] = React.useState<Product | null>(localProduct || null);
+  const [isLoading, setIsLoading] = React.useState(!localProduct && slug.startsWith("api-"));
+
+  React.useEffect(() => {
+    if (!localProduct && slug.startsWith("api-")) {
+      const fetchApiProduct = async () => {
+        try {
+          const res = await fetch("https://kolzsticks.github.io/Free-Ecommerce-Products-Api/main/products.json");
+          const data = await res.json();
+          const apiProd = data.find((p: any) => `api-${p.id}` === slug);
+          
+          if (apiProd) {
+            setProduct({
+              id: `api-${apiProd.id}`,
+              name: apiProd.name || apiProd.title || "Product",
+              slug: `api-${apiProd.id}`,
+              price: (apiProd.priceCents / 100) || apiProd.price || 0,
+              originalPrice: ((apiProd.priceCents / 100) || apiProd.price || 0) * 1.2,
+              rating: apiProd.rating?.stars || apiProd.rating?.rate || 4.5,
+              reviewCount: apiProd.rating?.count || 120,
+              description: apiProd.description,
+              images: [apiProd.image],
+              image: apiProd.image,
+              category: apiProd.category,
+              inStock: true,
+              stockCount: 50,
+              details: ["API Product", "Fetched dynamically", "Free shipping"],
+              specs: [{ name: "Category", value: apiProd.category }],
+              vendor: "API Partner"
+            });
+          }
+        } catch (error) {
+          console.error("Failed to fetch API product", error);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+      fetchApiProduct();
+    }
+  }, [slug, localProduct]);
 
   // States for purchase options
   const [selectedSize, setSelectedSize] = React.useState("");
@@ -39,6 +79,15 @@ export default function ProductPage({ params }: PageProps) {
       setQuantity(1);
     }
   }, [product]);
+
+  if (isLoading) {
+    return (
+      <div className="text-center py-20 flex flex-col items-center justify-center gap-3">
+        <RefreshCw className="h-8 w-8 text-primary animate-spin" />
+        <h1 className="text-lg font-black uppercase">Loading Product...</h1>
+      </div>
+    );
+  }
 
   if (!product) {
     return (
@@ -63,6 +112,11 @@ export default function ProductPage({ params }: PageProps) {
   const handleAddToCart = () => {
     addToCart(product, quantity, selectedSize, selectedColor);
     router.push("/cart");
+  };
+
+  const handleBuyNow = () => {
+    addToCart(product, quantity, selectedSize, selectedColor);
+    router.push("/checkout");
   };
 
   // Find related products (same category, excluding current)
@@ -112,11 +166,10 @@ export default function ProductPage({ params }: PageProps) {
               {/* Wishlist toggle */}
               <button
                 onClick={() => toggleWishlist(product)}
-                className={`p-2 rounded-full transition-all duration-200 cursor-pointer flex-shrink-0 ${
-                  isWishlisted
-                    ? "bg-red-50 text-red-500 scale-105"
-                    : "bg-muted hover:bg-muted text-muted-foreground hover:text-foreground"
-                }`}
+                className={`p-2 rounded-full transition-all duration-200 cursor-pointer flex-shrink-0 ${isWishlisted
+                  ? "bg-red-50 text-red-500 scale-105"
+                  : "bg-muted hover:bg-muted text-muted-foreground hover:text-foreground"
+                  }`}
                 aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
               >
                 <Heart className="h-4 w-4" fill={isWishlisted ? "currentColor" : "none"} />
@@ -129,9 +182,8 @@ export default function ProductPage({ params }: PageProps) {
                 {Array.from({ length: 5 }).map((_, i) => (
                   <Star
                     key={i}
-                    className={`h-3 w-3 ${
-                      i < Math.floor(product.rating) ? "fill-current" : "text-gray-300"
-                    }`}
+                    className={`h-3 w-3 ${i < Math.floor(product.rating) ? "fill-current" : "text-gray-300"
+                      }`}
                   />
                 ))}
               </div>
@@ -195,9 +247,8 @@ export default function ProductPage({ params }: PageProps) {
                     <button
                       key={c.name}
                       onClick={() => setSelectedColor(c.name)}
-                      className={`h-8 w-8 rounded-full border-2 transition-all flex items-center justify-center cursor-pointer ${
-                        selectedColor === c.name ? "border-foreground ring-1 ring-offset-2 ring-foreground" : "border-border"
-                      }`}
+                      className={`h-8 w-8 rounded-full border-2 transition-all flex items-center justify-center cursor-pointer ${selectedColor === c.name ? "border-foreground ring-1 ring-offset-2 ring-foreground" : "border-border"
+                        }`}
                       style={{ backgroundColor: c.hex }}
                       title={c.name}
                       aria-label={`Select color ${c.name}`}
@@ -223,11 +274,10 @@ export default function ProductPage({ params }: PageProps) {
                     <button
                       key={size}
                       onClick={() => setSelectedSize(size)}
-                      className={`min-h-[40px] min-w-[40px] border rounded-md font-semibold flex items-center justify-center transition-all cursor-pointer text-xs ${
-                        selectedSize === size
-                          ? "bg-foreground text-background border-foreground"
-                          : "bg-background border-border hover:border-muted-foreground text-foreground"
-                      }`}
+                      className={`min-h-[40px] min-w-[40px] border rounded-md font-semibold flex items-center justify-center transition-all cursor-pointer text-xs ${selectedSize === size
+                        ? "bg-foreground text-background border-foreground"
+                        : "bg-background border-border hover:border-muted-foreground text-foreground"
+                        }`}
                     >
                       {size}
                     </button>
@@ -267,9 +317,10 @@ export default function ProductPage({ params }: PageProps) {
                 >
                   Add to Cart - {formatPrice(product.price)}
                 </button>
-                
+
                 {/* Buy Now */}
                 <button
+                  onClick={handleBuyNow}
                   disabled={!product.inStock}
                   className="w-full bg-background border border-foreground hover:bg-muted text-foreground text-xs font-bold py-3.5 rounded-md transition-all flex items-center justify-center gap-1.5 cursor-pointer disabled:bg-muted disabled:text-muted-foreground disabled:border-border disabled:cursor-not-allowed"
                 >
@@ -289,17 +340,19 @@ export default function ProductPage({ params }: PageProps) {
           </p>
 
           {/* Value Propositions */}
-          <div className="pt-2 flex justify-center gap-6 text-[10px] text-muted-foreground">
-            <div className="flex items-center gap-1.5">
-              <Truck className="h-3.5 w-3.5 text-foreground" />
+          <div className="pt-6 flex justify-center gap-5 text-sm md:text-base text-muted-foreground">
+            <div className="flex items-center gap-3">
+              <Truck className="h-6 w-6 text-foreground" />
               <span>Free Shipping</span>
             </div>
-            <div className="flex items-center gap-1.5">
-              <RefreshCw className="h-3.5 w-3.5 text-foreground" />
+
+            <div className="flex items-center gap-3">
+              <RefreshCw className="h-6 w-6 text-foreground" />
               <span>Easy Returns</span>
             </div>
-            <div className="flex items-center gap-1.5">
-              <ShieldCheck className="h-3.5 w-3.5 text-foreground" />
+
+            <div className="flex items-center gap-3">
+              <ShieldCheck className="h-6 w-6 text-foreground" />
               <span>Secure Payment</span>
             </div>
           </div>
@@ -314,11 +367,10 @@ export default function ProductPage({ params }: PageProps) {
             <button
               key={tab}
               onClick={() => setActiveTab(tab as any)}
-              className={`pb-2 transition-all cursor-pointer capitalize ${
-                activeTab === tab
-                  ? "border-b-2 border-foreground text-foreground"
-                  : "border-b-2 border-transparent text-muted-foreground hover:text-foreground"
-              }`}
+              className={`pb-2 transition-all cursor-pointer capitalize ${activeTab === tab
+                ? "border-b-2 border-foreground text-foreground"
+                : "border-b-2 border-transparent text-muted-foreground hover:text-foreground"
+                }`}
             >
               {tab === "specs" ? "Specifications" : tab === "reviews" ? `Reviews (${product.reviewCount})` : tab === "shipping" ? "Shipping & Returns" : tab}
             </button>

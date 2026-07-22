@@ -79,6 +79,7 @@ body {
   color: var(--foreground);
   font-feature-settings: "rlig" 1, "calt" 1;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 h1,
@@ -166,6 +167,7 @@ h6 {
     opacity: 0;
     transform: translateY(16px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -174,4 +176,42 @@ h6 {
 
 .animate-hero-fade {
   animation: hero-fade 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.banners-track-container {
+  --card-width: 340px;
+  --card-gap: 18px;
+}
+
+@media (min-width: 640px) {
+  .banners-track-container {
+    --card-width: 650px;
+    --card-gap: 22px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .banners-track-container {
+    --card-width: 980px;
+    --card-gap: 28px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .banners-track-container {
+    --card-width: 1150px;
+  }
+}
+
+/* Hide scrollbar but keep scrolling */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  /* IE & Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+  /* Chrome, Safari, Opera */
 }

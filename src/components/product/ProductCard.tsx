@@ -92,10 +92,10 @@ function ProductCard({ product }: ProductCardProps) {
           {(product.image || (product.images && product.images.length > 0)) ? (
             <Image
               src={product.image || product.images[0]}
-              alt={product.name}
+              alt={product.name || "Product Image"}
               fill
               sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
-              className={`object-cover transition-transform duration-500 ${isHovered ? "scale-105" : "scale-100"}`}
+              className={`object-contain p-4 transition-transform duration-500 bg-white ${isHovered ? "scale-105" : "scale-100"}`}
             />
           ) : (
             <div className="w-full h-full flex flex-col items-center justify-center bg-muted/50 text-muted-foreground gap-2">

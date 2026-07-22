@@ -11,9 +11,16 @@ const nextConfig: NextConfig = {
   // Serve images as WebP/AVIF automatically for supported browsers
   images: {
     formats: ["image/avif", "image/webp"],
-    minimumCacheTTL: 31536000, // 1 year cache for images
+    minimumCacheTTL: 31536000,
     deviceSizes: [375, 640, 750, 828, 1080, 1200, 1920],
     imageSizes: [16, 32, 64, 96, 128, 256],
+
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**",
+      },
+    ],
   },
 
   // Aggressive HTTP caching for static assets
@@ -40,11 +47,15 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+
     ];
+
   },
 
   // Disable X-Powered-By header (small security + perf improvement)
   poweredByHeader: false,
+
 };
+
 
 export default nextConfig;

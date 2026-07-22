@@ -106,8 +106,8 @@ export default function CartPage() {
             >
               <div className="relative h-20 w-20 bg-muted rounded-xl overflow-hidden flex-shrink-0 border">
                 <Image
-                  src={item.product.image || item.product.images[0]}
-                  alt={item.product.name}
+                  src={item.product.image || item.product.images?.[0] || ""}
+                  alt={item.product.name || "Product image"}
                   fill
                   sizes="80px"
                   className="object-cover"
@@ -188,8 +188,8 @@ export default function CartPage() {
                     <div className="flex gap-3 sm:flex-col sm:gap-2">
                       <div className="relative h-14 w-14 sm:h-28 sm:w-full rounded-lg bg-muted overflow-hidden flex-shrink-0 border">
                         <Image
-                          src={rec.image || rec.images[0]}
-                          alt={rec.name}
+                          src={rec.image || rec.images?.[0] || ""}
+                          alt={rec.name || "Product image"}
                           fill
                           sizes="100px"
                           className="object-cover"

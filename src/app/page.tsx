@@ -1,11 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Star, ShieldCheck, Truck, RotateCcw, Box } from "lucide-react";
+import { ArrowRight, Star, ShieldCheck, Truck, RotateCcw, Box, Leaf } from "lucide-react";
 import { MOCK_PRODUCTS } from "@/data/products";
 import ProductCard from "@/components/product/ProductCard";
 import ReviewsMarquee from "@/components/home/ReviewsMarquee";
 import NewsletterForm from "@/components/home/NewsletterForm";
 import PromoBanners from "@/components/home/PromoBanners";
+import ApiProducts from "@/components/home/ApiProducts";
+
 
 export default function HomePage() {
   const bestSellers = MOCK_PRODUCTS.slice(0, 4);
@@ -19,47 +21,133 @@ export default function HomePage() {
   ];
 
   return (
-    <div className="space-y-24 pb-20">
-      {/* Hero Section */}
-      <section className="relative bg-primary rounded-b-[3rem] md:rounded-b-[5rem] overflow-hidden px-4 sm:px-6 lg:px-8 pt-8 md:pt-12 pb-12 md:pb-24 flex flex-col md:flex-row items-center justify-between gap-6 md:gap-12 -mt-px shadow-2xl">
-        {/* Left Info Column */}
-        <div className="flex-1 flex flex-col items-start gap-6 z-10 max-w-2xl text-left">
-          <h1 className="text-5xl md:text-[5.5rem] font-black tracking-tight leading-[1.05] text-primary-foreground animate-hero-fade">
-            We bring the store to your door
-          </h1>
+    <div className="pt-0 pb-20">
+      <div className="p-0 m-0">
+        <section
+          className="relative h-[320px] sm:h-[450px] md:h-[700px] overflow-hidden"
+        >
+          <div
+            className="
+    absolute inset-0
+    bg-no-repeat
+    bg-[length:180%]
+    sm:bg-[length:140%]
+    md:bg-cover
+  "
+            style={{
+              backgroundImage: "url('/images/bgimage-desktop.png')",
+              backgroundPosition: "center -1px", // Moves image down
+            }}
+          />
 
-          <p className="text-base text-primary-foreground/80 leading-relaxed max-w-md font-medium">
-            Get organic produce and sustainably sourced groceries delivery at up to 4% off grocery.
-          </p>
+          {/* Optional overlay for better text visibility */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/45 via-black/20 to-transparent md:from-black/35 md:via-black/30" />
 
-          <div className="mt-4">
-            <Link
-              href="/shop"
-              className="bg-accent hover:bg-accent/90 text-accent-foreground text-sm font-bold py-4 px-10 rounded-xl transition-all shadow-lg hover:shadow-xl active:scale-95 inline-block"
-            >
-              Shop now
-            </Link>
+          {/* Content */}
+
+          <div className="relative z-20 max-w-[220px] sm:max-w-[280px] md:max-w-xl px-4 sm:px-6 lg:px-16 py-8 md:py-20">
+
+            {/* Badge */}
+
+
+
+
+
+            {/* Heading */}
+
+            <h1 className="mt-3 text-[1.9rem] leading-[0.9] sm:text-[2.8rem] md:text-7xl lg:text-[5.5rem] font-black text-white font-playfair">
+
+              Groceries,
+
+              <br />
+
+              delivered
+
+              <br />
+
+              with <span className="text-lime-300">care.</span>
+
+            </h1>
+
+
+
+            {/* Description */}
+
+            <p className="mt-2 text-[11px] sm:text-sm md:text-lg text-white/90 leading-4 md:leading-7 max-w-[180px] md:max-w-md">
+
+              Organic produce, pantry essentials and more delivered fresh to your door.
+
+            </p>
+
+
+
+            {/* Buttons */}
+
+            <div className="flex flex-col sm:flex-row gap-3 mt-5 md:mt-12 lg:mt-16">
+
+              <Link
+
+                href="/shop"
+
+                className="group inline-flex items-center gap-1.5 md:gap-3 bg-lime-400 text-black text-[11px] md:text-base font-semibold py-1.5 md:py-3 px-3 md:px-7 rounded-full shadow-md w-fit transition-all"
+              >
+                <span>Shop Now</span>
+
+                <div className="bg-black text-white rounded-full p-1">
+                  <ArrowRight className="w-4 h-4" />
+
+                </div>
+
+              </Link>
+
+
+
+              <Link
+
+                href="/deals"
+                className="inline-flex items-center justify-center border border-white/40 bg-white/10 backdrop-blur-md text-white text-[11px] md:text-base font-semibold py-1.5 md:py-3 px-4 md:px-8 rounded-full w-fit transition-all"              >
+
+                Explore Deals
+
+              </Link>
+
+            </div>
+
+
+
           </div>
-        </div>
 
-        {/* Right Image Column */}
-        <div className="flex-1 relative w-full flex items-center justify-center min-h-[250px] md:min-h-[450px] mt-2 md:mt-0">
-          <div className="relative w-full h-[250px] md:h-full max-w-[320px] md:max-w-[500px] md:aspect-square z-10">
-            <Image
-              src="/images/hero_grocery_bag22.png"
-              alt="Fresh groceries in a reusable green bag"
-              fill
-              sizes="(max-width: 768px) 100vw, 50vw"
-              className="object-contain drop-shadow-2xl"
-              priority
-              fetchPriority="high"
-            />
+          {/* Features - Positioned Bottom Right */}
+          <div className="absolute bottom-2 right-3 sm:bottom-6 sm:right-6 md:bottom-10 md:right-12 z-20">
+            <div className="flex gap-3 sm:gap-6 md:gap-8">
+              {[
+                { icon: Leaf, title: "100% Organic" },
+                { icon: Truck, title: "Fast Delivery" },
+                { icon: ShieldCheck, title: "Secure Payment" },
+              ].map((item, index) => (
+                <div
+                  key={index}
+                  className="flex flex-col items-center text-center text-white drop-shadow-md"
+                >
+                  <div className="bg-white/20 backdrop-blur-md p-1.5 md:p-2.5 rounded-full mb-1 md:mb-2 shadow-sm">
+                    <item.icon className="w-3 h-3 md:w-5 md:h-5" />
+                  </div>
+                  <span className="text-[6px] md:text-sm font-semibold whitespace-nowrap">
+                    {item.title}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+
+        </section>
+      </div>
 
       {/* Gromuse Style Categories Grid */}
-      <section className="px-4 sm:px-6 lg:px-8 -mt-12 relative z-20 max-w-7xl mx-auto mb-16">
+      <section className="px-1 sm:px-6 lg:px-8  relative z-20 max-w-7xl mx-auto mt-5 -mb-10">
+        <div className="text-left mb-3">
+          <h2 className="text-1xl md:text-2xl font-black tracking-tight text-foreground mt-2">Shop by Category</h2>
+        </div>
         <div className="flex overflow-x-auto pb-4 hide-scrollbar gap-3 md:grid md:grid-cols-6 md:gap-3 md:overflow-visible snap-x">
           {[
             { name: "Vegetable", subtitle: "Local market", img: "/images/products/grocery_cabbage.png" },
@@ -73,6 +161,7 @@ export default function HomePage() {
               href={`/shop?category=${cat.name}`}
               className="group flex-shrink-0 w-32 md:w-auto bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-all flex flex-col overflow-hidden snap-start"
             >
+
               <div className="relative w-full h-24 overflow-hidden bg-gray-50">
                 <Image
                   src={cat.img}
@@ -107,7 +196,7 @@ export default function HomePage() {
       <PromoBanners />
 
       {/* Best Sellers */}
-      <section className="space-y-8">
+      <section className="space-y-4 px-1 sm:px-6 lg:px-8 mt-8">
         <div className="flex items-end justify-between">
           <div className="text-left">
             <span className="text-[10px] font-bold uppercase tracking-wider text-primary">Best Sellers</span>
@@ -130,7 +219,7 @@ export default function HomePage() {
       </section>
 
       {/* Grocery Collection Banner */}
-      <section className="rounded-[2.5rem] bg-primary text-white p-8 md:p-16 flex flex-col md:flex-row items-center gap-12 overflow-hidden relative">
+      <section className="rounded-[2.5rem] bg-primary text-white p-8 md:p-16 flex flex-col md:flex-row items-center gap-12 overflow-hidden relative px-1 sm:px-6 lg:px-8 mt-8">
         <div className="flex-1 space-y-6 z-10">
           <span className="bg-white/10 backdrop-blur-md text-white text-[9px] font-black uppercase tracking-wider px-3 py-1.5 rounded-full border border-white/10">
             FARM FRESH
@@ -157,7 +246,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="flex-1 flex gap-4 w-full h-full z-10">
+        <div className="flex-1 flex gap-4 w-full h-full z-10 px-1 sm:px-6 lg:px-8">
           <div className="relative aspect-[3/4] w-1/2 rounded-2xl overflow-hidden transform translate-y-4 shadow-xl bg-white/5">
             <Image src="/images/products/grocery_cabbage.png" alt="Fresh Cabbage" fill sizes="(max-width: 768px) 50vw, 25vw" loading="lazy" className="object-cover" />
           </div>
@@ -171,7 +260,7 @@ export default function HomePage() {
       </section>
 
       {/* New Arrivals */}
-      <section className="space-y-8">
+      <section className="space-y-2 px-1 sm:px-6 lg:px-8 mt-8">
         <div className="flex items-end justify-between">
           <div className="text-left">
             <span className="text-[10px] font-bold uppercase tracking-wider text-primary">Fresh In</span>
@@ -190,7 +279,7 @@ export default function HomePage() {
       </section>
 
       {/* Fashion Promo Banner & Collection */}
-      <section className="space-y-8">
+      <section className="space-y-2 mt-8">
         <div className="rounded-[2rem] md:rounded-[2.5rem] overflow-hidden w-full shadow-md border border-border/10">
           <Link href="/shop?category=Fashion" className="block w-full relative group">
             <Image
@@ -206,17 +295,22 @@ export default function HomePage() {
         </div>
 
         {/* Fashion Collection Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 mt-5">
           {fashionProducts.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>
       </section>
 
+
+      <ApiProducts />
+
+
+
       {/* Why Woxly & Reviews */}
-      <div className="space-y-24">
-        <section className="space-y-5">
-          <div className="flex items-end justify-between">
+      <div className="space-y-0 mt-8">
+        <section className="-space-y-0">
+          <div className="flex items-end justify-between ">
             <div className="text-left">
               <span className="text-[10px] font-bold uppercase tracking-wider text-primary">Why Woxly</span>
               <h2 className="text-2xl md:text-4xl font-black tracking-tight text-foreground mt-1">Details that make<br className="md:hidden" /> the difference</h2>
@@ -246,7 +340,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="space-y-8">
+        <section className="-space-y-0 mt-5 ">
           <div className="text-left">
             <span className="text-[10px] font-bold uppercase tracking-wider text-primary">Reviews</span>
             <h2 className="text-3xl md:text-4xl font-black tracking-tight text-foreground mt-2">What customers say</h2>
@@ -256,7 +350,7 @@ export default function HomePage() {
           <ReviewsMarquee reviews={reviews} />
 
           {/* Desktop Grid Reviews — pure server HTML */}
-          <div className="hidden md:grid md:grid-cols-3 gap-6">
+          <div className="hidden md:grid md:grid-cols-3 gap-0 mt-8">
             {reviews.map((item, i) => (
               <div key={i} className="bg-background border border-border rounded-3xl p-8 flex flex-col gap-6 shadow-sm">
                 <div className="flex gap-1 text-amber-500">
@@ -283,7 +377,7 @@ export default function HomePage() {
       </div>
 
       {/* Newsletter */}
-      <section className="bg-gradient-to-br from-indigo-50 via-purple-50 to-blue-50 dark:from-indigo-950/20 dark:via-purple-950/20 dark:to-blue-950/20 border border-indigo-100 dark:border-indigo-900/50 rounded-[2.5rem] p-12 md:p-20 text-center flex flex-col items-center shadow-sm">
+      <section className="-mb-25  -sm:mb-10 bg-gradient-to-br from-indigo-50 via-purple-50 to-blue-50 dark:from-indigo-950/20 dark:via-purple-950/20 dark:to-blue-950/20 border border-indigo-100 dark:border-indigo-900/50 rounded-[2.5rem] py-10 px-8 md:py-14 md:px-16 mt-5 text-center flex flex-col items-center shadow-sm">
         <span className="text-[10px] font-bold uppercase tracking-wider text-primary mb-4">Join the list</span>
         <h2 className="text-3xl md:text-5xl font-black tracking-tight text-foreground">
           Get 10% off your first order.

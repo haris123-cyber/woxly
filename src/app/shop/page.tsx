@@ -16,6 +16,7 @@ function ShopContent() {
   const searchQuery = searchParams.get("q") || "";
 
   // Core Filter states
+  const [allProducts, setAllProducts] = useState<Product[]>(MOCK_PRODUCTS);
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 300]);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
@@ -24,6 +25,39 @@ function ShopContent() {
 
   // Mobile drawer state
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+
+  // Fetch API products on mount
+  useEffect(() => {
+    async function fetchApiProducts() {
+      try {
+        const res = await fetch("https://kolzsticks.github.io/Free-Ecommerce-Products-Api/main/products.json");
+        const data = await res.json();
+        
+        const mappedProducts: Product[] = data.map((apiProd: any) => ({
+          id: `api-${apiProd.id}`,
+          name: apiProd.name || apiProd.title || "Product",
+          slug: `api-${apiProd.id}`,
+          price: (apiProd.priceCents / 100) || apiProd.price || 0,
+          rating: apiProd.rating?.stars || apiProd.rating?.rate || 4.5,
+          reviewCount: apiProd.rating?.count || Math.floor(Math.random() * 200),
+          description: apiProd.description,
+          images: [apiProd.image],
+          image: apiProd.image,
+          category: apiProd.category,
+          inStock: true,
+          stockCount: 50,
+          details: ["API Product", "Fetched dynamically", "Free shipping"],
+          specs: [{ name: "Category", value: apiProd.category }],
+          vendor: "API Partner"
+        }));
+        
+        setAllProducts([...MOCK_PRODUCTS, ...mappedProducts]);
+      } catch (error) {
+        console.error("Failed to fetch API products", error);
+      }
+    }
+    fetchApiProducts();
+  }, []);
 
   // Sync Category from search parameters
   useEffect(() => {
@@ -42,7 +76,17 @@ function ShopContent() {
     };
   }, [mobileFiltersOpen]);
 
-  const brandsList = Array.from(new Set(MOCK_PRODUCTS.map(p => p.vendor).filter(Boolean))) as string[];
+  const brandsList = Array.from(new Set(allProducts.map(p => p.vendor).filter(Boolean))) as string[];
+
+  // Dynamic Categories
+  const categoriesMap = new Map<string, number>();
+  allProducts.forEach(p => {
+    categoriesMap.set(p.category, (categoriesMap.get(p.category) || 0) + 1);
+  });
+  const dynamicCategories = [
+    { name: "All Products", count: allProducts.length },
+    ...Array.from(categoriesMap.entries()).map(([name, count]) => ({ name, count })).sort((a, b) => b.count - a.count)
+  ];
 
   const handleBrandChange = (brand: string) => {
     setSelectedBrands((prev) =>
@@ -60,7 +104,7 @@ function ShopContent() {
   };
 
   // Filter Logic
-  const filteredProducts = MOCK_PRODUCTS.filter((product) => {
+  const filteredProducts = allProducts.filter((product) => {
     // Category check
     if (
       selectedCategory !== "All Products" &&
@@ -117,7 +161,7 @@ function ShopContent() {
             {selectedCategory === "All Products" ? "All Products" : selectedCategory}
           </h1>
           <p className="text-xs text-muted-foreground mt-0.5">
-            Showing 1–{sortedProducts.length} of {MOCK_PRODUCTS.length} products
+            Showing 1–{sortedProducts.length} of {allProducts.length} products
             {searchQuery && ` for "${searchQuery}"`}
           </p>
         </div>
@@ -166,7 +210,7 @@ function ShopContent() {
               Categories
             </h3>
             <div className="flex flex-col gap-1">
-              {MOCK_CATEGORIES.map((cat) => (
+              {dynamicCategories.map((cat) => (
                 <button
                   key={cat.name}
                   onClick={() => setSelectedCategory(cat.name)}
@@ -317,7 +361,7 @@ function ShopContent() {
                     Categories
                   </h3>
                   <div className="flex flex-col gap-1.5 pt-1.5">
-                    {MOCK_CATEGORIES.map((cat) => (
+                    {dynamicCategories.map((cat) => (
                       <button
                         key={cat.name}
                         suppressHydrationWarning
