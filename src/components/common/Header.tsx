@@ -226,8 +226,9 @@ export default function Header() {
 
         {/* Slide-out Sidebar Navigation Drawer */}
         <div
-          className={`fixed inset-0 z-50 transition-opacity duration-300 ${mobileMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-            }`}
+          className={`fixed inset-0 z-50 transition-opacity duration-300 ${
+            mobileMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+          }`}
         >
           {/* Backdrop */}
           <div

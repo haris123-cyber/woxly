@@ -30,7 +30,7 @@ function ShopContent() {
   useEffect(() => {
     async function fetchApiProducts() {
       try {
-        const res = await fetch("https://kolzsticks.github.io/Free-Ecommerce-Products-Api/main/products.json");
+        const res = await fetch("https://kolzsticks.github.io/Free-Ecommerce-Products-Api/main/products.json", { cache: "force-cache" });
         const data = await res.json();
         
         const mappedProducts: Product[] = data.map((apiProd: any) => ({
@@ -327,8 +327,8 @@ function ShopContent() {
             </div>
           ) : (
             <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-              {sortedProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
+              {sortedProducts.map((product, index) => (
+                <ProductCard key={product.id} product={product} priority={index < 4} />
               ))}
             </div>
           )}

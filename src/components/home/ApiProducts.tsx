@@ -16,7 +16,8 @@ export default function ApiProducts() {
         async function fetchProducts() {
             try {
                 const res = await fetch(
-                    "https://kolzsticks.github.io/Free-Ecommerce-Products-Api/main/products.json"
+                    "https://kolzsticks.github.io/Free-Ecommerce-Products-Api/main/products.json",
+                    { cache: "force-cache" }
                 );
 
                 const data = await res.json();

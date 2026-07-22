@@ -107,7 +107,10 @@ export default function ProductPage({ params }: PageProps) {
     );
   }
 
-  const isWishlisted = wishlist.some((p) => p.id === product.id);
+  const [mounted, setMounted] = React.useState(false);
+  React.useEffect(() => { setMounted(true); }, []);
+
+  const isWishlisted = mounted ? wishlist.some((p) => p.id === product.id) : false;
 
   const handleAddToCart = () => {
     addToCart(product, quantity, selectedSize, selectedColor);

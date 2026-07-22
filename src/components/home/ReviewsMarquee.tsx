@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { Star } from "lucide-react";
 
 interface Review {
@@ -15,11 +14,12 @@ interface ReviewsMarqueeProps {
 export default function ReviewsMarquee({ reviews }: ReviewsMarqueeProps) {
   return (
     <div className="md:hidden overflow-hidden relative w-full -mx-4 px-4 sm:-mx-6 sm:px-6 py-4 [mask-image:linear-gradient(to_right,transparent,black_5%,black_95%,transparent)]">
-      <motion.div
-        className="flex flex-row gap-4 w-max"
-        animate={{ x: ["0%", "-50%"] }}
-        transition={{ repeat: Infinity, ease: "linear", duration: 20 }}
-      >
+      <style dangerouslySetInnerHTML={{ __html: `
+        @keyframes marquee-scroll { from { transform: translateX(0) } to { transform: translateX(-50%) } }
+        .marquee-track { animation: marquee-scroll 20s linear infinite; }
+        .marquee-track:hover { animation-play-state: paused; }
+      `}} />
+      <div className="marquee-track flex flex-row gap-4 w-max">
         {[...reviews, ...reviews].map((item, i) => (
           <div
             key={i}
@@ -46,7 +46,7 @@ export default function ReviewsMarquee({ reviews }: ReviewsMarqueeProps) {
             </div>
           </div>
         ))}
-      </motion.div>
+      </div>
     </div>
   );
 }

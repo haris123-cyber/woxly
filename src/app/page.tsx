@@ -1,12 +1,11 @@
+import { Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Star, ShieldCheck, Truck, RotateCcw, Box, Leaf } from "lucide-react";
+import { ArrowRight, Star, ShieldCheck, Truck, Leaf, RotateCcw, Box } from "lucide-react";
 import { MOCK_PRODUCTS } from "@/data/products";
 import ProductCard from "@/components/product/ProductCard";
-import ReviewsMarquee from "@/components/home/ReviewsMarquee";
 import NewsletterForm from "@/components/home/NewsletterForm";
-import PromoBanners from "@/components/home/PromoBanners";
-import ApiProducts from "@/components/home/ApiProducts";
+import { LazyPromoBanners, LazyReviewsMarquee, LazyApiProducts } from "@/components/home/LazyIslands";
 
 
 export default function HomePage() {
@@ -26,18 +25,15 @@ export default function HomePage() {
         <section
           className="relative h-[320px] sm:h-[450px] md:h-[700px] overflow-hidden"
         >
-          <div
-            className="
-    absolute inset-0
-    bg-no-repeat
-    bg-[length:180%]
-    sm:bg-[length:140%]
-    md:bg-cover
-  "
-            style={{
-              backgroundImage: "url('/images/bgimage-desktop.png')",
-              backgroundPosition: "center -1px", // Moves image down
-            }}
+          <Image
+            src="/images/bgimage-desktop.png"
+            alt="Fresh groceries hero banner"
+            fill
+            priority
+            fetchPriority="high"
+            quality={75}
+            sizes="100vw"
+            className="object-cover object-center"
           />
 
           {/* Optional overlay for better text visibility */}
@@ -104,7 +100,7 @@ export default function HomePage() {
 
               <Link
 
-                href="/deals"
+                href="/shop"
                 className="inline-flex items-center justify-center border border-white/40 bg-white/10 backdrop-blur-md text-white text-[11px] md:text-base font-semibold py-1.5 md:py-3 px-4 md:px-8 rounded-full w-fit transition-all"              >
 
                 Explore Deals
@@ -168,7 +164,6 @@ export default function HomePage() {
                   alt={cat.name}
                   fill
                   sizes="(max-width: 768px) 33vw, 16vw"
-                  loading="lazy"
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
                 />
               </div>
@@ -193,7 +188,7 @@ export default function HomePage() {
       </section>
 
       {/* Promo Banners Peeking Carousel */}
-      <PromoBanners />
+      <LazyPromoBanners />
 
       {/* Best Sellers */}
       <section className="space-y-4 px-1 sm:px-6 lg:px-8 mt-8">
@@ -212,8 +207,8 @@ export default function HomePage() {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
-          {bestSellers.map((product) => (
-            <ProductCard key={product.id} product={product} />
+          {bestSellers.map((product, index) => (
+            <ProductCard key={product.id} product={product} priority={index < 2} />
           ))}
         </div>
       </section>
@@ -248,10 +243,10 @@ export default function HomePage() {
 
         <div className="flex-1 flex gap-4 w-full h-full z-10 px-1 sm:px-6 lg:px-8">
           <div className="relative aspect-[3/4] w-1/2 rounded-2xl overflow-hidden transform translate-y-4 shadow-xl bg-white/5">
-            <Image src="/images/products/grocery_cabbage.png" alt="Fresh Cabbage" fill sizes="(max-width: 768px) 50vw, 25vw" loading="lazy" className="object-cover" />
+            <Image src="/images/products/grocery_cabbage.png" alt="Fresh Cabbage" fill sizes="(max-width: 768px) 50vw, 25vw" className="object-cover" />
           </div>
           <div className="relative aspect-[3/4] w-1/2 rounded-2xl overflow-hidden transform -translate-y-4 shadow-xl bg-white/5">
-            <Image src="/images/products/grocery_avocado.png" alt="Fresh Avocado" fill sizes="(max-width: 768px) 50vw, 25vw" loading="lazy" className="object-cover" />
+            <Image src="/images/products/grocery_avocado.png" alt="Fresh Avocado" fill sizes="(max-width: 768px) 50vw, 25vw" className="object-cover" />
           </div>
         </div>
 
@@ -303,7 +298,7 @@ export default function HomePage() {
       </section>
 
 
-      <ApiProducts />
+      <LazyApiProducts />
 
 
 
@@ -346,8 +341,8 @@ export default function HomePage() {
             <h2 className="text-3xl md:text-4xl font-black tracking-tight text-foreground mt-2">What customers say</h2>
           </div>
 
-          {/* Mobile Auto-scrolling — client island (framer-motion) */}
-          <ReviewsMarquee reviews={reviews} />
+          {/* Mobile Auto-scrolling — client island */}
+          <LazyReviewsMarquee reviews={reviews} />
 
           {/* Desktop Grid Reviews — pure server HTML */}
           <div className="hidden md:grid md:grid-cols-3 gap-0 mt-8">

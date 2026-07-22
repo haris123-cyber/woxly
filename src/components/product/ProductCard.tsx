@@ -11,19 +11,20 @@ import { formatPrice } from "@/lib/utils";
 
 interface ProductCardProps {
   product: Product;
+  priority?: boolean;
 }
 
-function ProductCard({ product }: ProductCardProps) {
-  // Selector-based subscriptions — component only re-renders when these specific values change
-  const addToCart    = useCartStore((s) => s.addToCart);
+function ProductCard({ product, priority = false }: ProductCardProps) {
+  const addToCart = useCartStore((s) => s.addToCart);
   const toggleWishlist = useCartStore((s) => s.toggleWishlist);
-  const wishlist     = useCartStore((s) => s.wishlist);
-  const router       = useRouter();
-
+  const wishlist = useCartStore((s) => s.wishlist);
+  const router = useRouter();
   const [isHovered, setIsHovered] = useState(false);
   const [mounted, setMounted] = useState(false);
 
-  useEffect(() => { setMounted(true); }, []);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const isWishlisted = mounted ? wishlist.some((p) => p.id === product.id) : false;
 
@@ -31,10 +32,12 @@ function ProductCard({ product }: ProductCardProps) {
     ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
     : null;
 
+  const isApiProduct = String(product.id).startsWith("api-");
+
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    const size  = product.sizes?.[0] || "One Size";
+    const size = product.sizes?.[0] || "One Size";
     const color = product.colors?.[0]?.name;
     addToCart(product, 1, size, color);
     router.push("/cart");
@@ -45,6 +48,10 @@ function ProductCard({ product }: ProductCardProps) {
     e.stopPropagation();
     toggleWishlist(product);
   };
+
+  const imageClass = `transition-transform duration-300 pointer-events-none ${
+    isApiProduct ? "object-contain p-4 bg-white" : "object-cover"
+  } ${isHovered ? "scale-105" : "scale-100"}`;
 
   return (
     <div
@@ -77,9 +84,9 @@ function ProductCard({ product }: ProductCardProps) {
         <button
           suppressHydrationWarning
           onClick={handleWishlist}
-          className={`absolute top-3 right-3 z-10 p-2 rounded-full transition-all duration-200 cursor-pointer ${
+          className={`absolute top-3 right-3 z-10 p-2 rounded-full transition-colors duration-200 cursor-pointer ${
             isWishlisted
-              ? "bg-white text-red-500 scale-110 shadow-sm"
+              ? "bg-white text-red-500 shadow-sm"
               : "bg-white text-muted-foreground hover:text-foreground shadow-sm"
           }`}
           aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
@@ -89,16 +96,17 @@ function ProductCard({ product }: ProductCardProps) {
 
         {/* Product Main Image */}
         <Link href={`/product/${product.slug}`} className="relative block h-full w-full">
-          {(product.image || (product.images && product.images.length > 0)) ? (
+          {product.image || (product.images && product.images.length > 0) ? (
             <Image
               src={product.image || product.images[0]}
               alt={product.name || "Product Image"}
               fill
-              sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
-              className={`object-contain p-4 transition-transform duration-500 bg-white ${isHovered ? "scale-105" : "scale-100"}`}
+              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+              className={imageClass}
+              priority={priority}
             />
           ) : (
-            <div className="w-full h-full flex flex-col items-center justify-center bg-muted/50 text-muted-foreground gap-2">
+            <div className="w-full h-full flex items-center justify-center bg-muted/50 text-muted-foreground">
               <span className="text-[10px] font-bold uppercase tracking-wider">No Image</span>
             </div>
           )}
@@ -106,8 +114,8 @@ function ProductCard({ product }: ProductCardProps) {
 
         {/* Desktop Quick Actions Overlay */}
         <div
-          className={`absolute bottom-4 left-0 right-0 z-10 px-4 hidden md:flex gap-2 justify-center transition-all duration-300 transform ${
-            isHovered ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0 pointer-events-none"
+          className={`absolute bottom-4 left-0 right-0 z-10 px-4 hidden md:flex gap-2 justify-center transition-all duration-200 ${
+            isHovered ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3 pointer-events-none"
           }`}
         >
           <button
@@ -115,14 +123,14 @@ function ProductCard({ product }: ProductCardProps) {
             onClick={handleAddToCart}
             disabled={!product.inStock}
             aria-label={`Add ${product.name} to cart`}
-            className="flex-1 bg-primary hover:bg-primary/95 text-primary-foreground text-xs font-bold py-2.5 px-4 rounded-xl shadow-lg flex items-center justify-center gap-1.5 transition-all active:scale-95 disabled:bg-zinc-400 disabled:cursor-not-allowed cursor-pointer"
+            className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground text-xs font-bold py-2.5 px-4 rounded-xl shadow-lg flex items-center justify-center gap-1.5 transition-colors disabled:bg-zinc-400 disabled:cursor-not-allowed cursor-pointer"
           >
             <ShoppingBag className="h-3.5 w-3.5" />
             Add to Cart
           </button>
           <Link
             href={`/product/${product.slug}`}
-            className="bg-background hover:bg-muted text-foreground border border-border p-2.5 rounded-xl shadow-lg flex items-center justify-center transition-all active:scale-95"
+            className="bg-background hover:bg-muted text-foreground border border-border p-2.5 rounded-xl shadow-lg flex items-center justify-center transition-colors"
             aria-label="View Details"
           >
             <Eye className="h-3.5 w-3.5" />
@@ -167,7 +175,7 @@ function ProductCard({ product }: ProductCardProps) {
             suppressHydrationWarning
             onClick={handleAddToCart}
             disabled={!product.inStock}
-            className="md:hidden bg-primary text-primary-foreground hover:bg-primary/95 p-2 rounded-xl transition-all active:scale-95 disabled:bg-zinc-400 disabled:cursor-not-allowed cursor-pointer"
+            className="md:hidden bg-primary text-primary-foreground hover:bg-primary/90 p-2 rounded-xl transition-colors disabled:bg-zinc-400 disabled:cursor-not-allowed cursor-pointer"
             aria-label="Add to cart"
           >
             <ShoppingBag className="h-4 w-4" />
@@ -178,5 +186,4 @@ function ProductCard({ product }: ProductCardProps) {
   );
 }
 
-// React.memo prevents re-renders when parent re-renders but product prop hasn't changed
 export default memo(ProductCard);
